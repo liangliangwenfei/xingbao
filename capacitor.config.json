@@ -1,0 +1,13 @@
+{
+  "appId": "com.xingbao.training",
+  "appName": "星宝训练营",
+  "webDir": "www",
+  "server": {
+    "url": "http://198.18.0.1:5000",
+    "cleartext": true,
+    "allowNavigation": []
+  },
+  "android": {
+    "allowMixedContent": true
+  }
+}

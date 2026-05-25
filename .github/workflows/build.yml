@@ -1,0 +1,47 @@
+name: 编译APK
+
+on:
+  push:
+    branches: [main, master]
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 安装Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: 安装Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 安装Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          packages: 'platforms;android-34 build-tools;34.0.0'
+
+      - name: 安装依赖
+        run: npm install
+
+      - name: 同步Capacitor
+        run: npx cap sync android
+
+      - name: 编译APK (Debug)
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: 上传APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: 星宝训练营-APK
+          path: android/app/build/outputs/apk/debug/app-debug.apk

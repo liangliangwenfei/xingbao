@@ -1,0 +1,84 @@
+import json, sys, io
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+
+modules = {
+  'social': {
+    'id': 'social', 'name': '社交对话训练', 'icon': '🦊', 'color': '#4A9C5C', 'type': 'chat',
+    'desc': '在森林中与动物朋友们练习日常社交对话',
+    'items': [
+      {'id':'travel','name':'旅行','icon':'🦊','character':'小狐','desc':'一只爱旅行的小狐狸','scene':'你在森林小径上遇到了一只背着行囊的小狐狸...','opening':'嘿！你也喜欢旅行吗？我刚从彩虹瀑布回来，那里的水花闪闪发光太美了。你去过哪些好玩的地方呀？'},
+      {'id':'books','name':'书籍','icon':'🐿️','character':'小松','desc':'一只爱看书的小松鼠','scene':'在森林图书馆的大树下，一只小松鼠正抱着一本书看得入迷...','opening':'我看到你也在看书～最近有什么好看的书推荐吗？我刚看完一本关于星星的绘本。'},
+      {'id':'sports','name':'运动','icon':'🐒','character':'小猴','desc':'一只活泼好动的小猴子','scene':'在森林运动场上，一只小猴子刚踢完果子球...','opening':'今天天气真好，我刚踢完一场果子球！你也喜欢运动吗？'},
+      {'id':'music','name':'音乐','icon':'🐦','character':'小莺','desc':'一只爱唱歌的小黄莺','scene':'在森林音乐角的树枝上，一只小黄莺正哼着歌...','opening':'啾啾～我正在哼一首新学的歌。你喜欢听什么类型的音乐呀？'},
+      {'id':'movies','name':'电影','icon':'🦁','character':'小狮','desc':'一只喜欢看动画片的小狮子','scene':'在森林影院门口，电影刚散场，一只小狮子还沉浸在剧情中...','opening':'刚才那部动画片你觉得怎么样？我特别喜欢那个结局。'},
+      {'id':'games','name':'游戏','icon':'🐼','character':'小胖','desc':'一只爱玩游戏的小熊猫','scene':'在森林游戏角的竹林边，一只小熊猫正在玩拼图...','opening':'你也在玩游戏吗？我最近在玩一个特别有趣的拼图游戏。'}
+    ]
+  },
+  'daily_life': {
+    'id': 'daily_life', 'name': '日常生活训练', 'icon': '🐻', 'color': '#5BA4D6', 'type': 'chat',
+    'desc': '在动物小镇练习生活中常见场景的实用对话',
+    'items': [
+      {'id':'ordering','name':'餐厅点餐','icon':'🍯','character':'熊大厨','desc':'熊熊餐厅的大厨','scene':'你走进森林里飘着香味的熊熊餐厅...','opening':'欢迎光临熊熊餐厅！今天有新鲜的蜂蜜松饼和蘑菇汤。你想吃点什么呀？'},
+      {'id':'shopping','name':'超市购物','icon':'🛒','character':'小浣','desc':'森林超市的店员小浣熊','scene':'你在森林超市里找东西，店员小浣熊看到你...','opening':'嗨！需要帮忙找什么东西吗？我们超市新到了一批松果饼干！'},
+      {'id':'directions','name':'问路指引','icon':'🗺️','character':'长颈鹿大叔','desc':'热心的长颈鹿，个子高看得远','scene':'你在森林岔路口看着地图有点迷茫...','opening':'小朋友，我看你好像迷路了？别担心，我对这片森林可熟了。'},
+      {'id':'doctor','name':'看医生','icon':'🏥','character':'大象医生','desc':'森林诊所温柔耐心的大象医生','scene':'你坐在森林诊所里，大象医生正用长鼻子轻轻翻看病历...','opening':'你好，我是大象医生。今天哪里不舒服呀？慢慢说，不着急。'},
+      {'id':'phone_call','name':'接打电话','icon':'📞','character':'小白','desc':'你的好朋友小白兔','scene':'你的树洞电话响了，是好朋友小白兔打来的...','opening':'喂？是我呀小白！周末森林里要举办蘑菇节，想问问你要不要一起去？'},
+      {'id':'appointment','name':'预约服务','icon':'📅','character':'狐狸小姐','desc':'森林社区中心的前台狐狸小姐','scene':'你来到森林社区中心的服务台前...','opening':'你好呀！欢迎来到森林社区中心。想预约什么活动呢？'}
+    ]
+  },
+  'expression': {
+    'id': 'expression', 'name': '口语表达训练', 'icon': '🦜', 'color': '#F5A623', 'type': 'expression',
+    'desc': '跟着聪明的鹦鹉老师练习描述、讲述、表达',
+    'items': [
+      {'id':'describe','name':'描述练习','icon':'🦜','desc':'鹦鹉老师带你仔细观察','instruction':'嗨！我是鹦鹉老师小鹦。现在请你看看周围，选一样东西，尽可能详细地描述给我听。'},
+      {'id':'storytelling','name':'故事讲述','icon':'🐢','desc':'老乌龟爷爷陪你编故事','instruction':'小朋友好，我是龟爷爷。我给你开个头，你接着发挥想象力往下编。'},
+      {'id':'feelings','name':'情绪表达','icon':'🐶','desc':'和小狗小汪一起认识感受','instruction':'汪汪！我是小汪，我的心情都写在尾巴上。你今天的心情怎么样？'},
+      {'id':'retell','name':'复述练习','icon':'🐵','desc':'小猴子小灵记性特别好','instruction':'吱吱！我是小灵猴。我来说一段话，你仔细听，然后用你自己的话再说一遍。'}
+    ]
+  },
+  'aba': {
+    'id': 'aba', 'name': 'ABA结构化训练', 'icon': '🐘', 'color': '#8B6BAE', 'type': 'aba',
+    'desc': '大象老师带你做回合式训练，一步一步学本领',
+    'items': [
+      {'id':'greeting','name':'打招呼','icon':'👋','sd':'在森林小路遇到认识的小伙伴，你该怎么说？','target':'主动说出问候语','examples':['你好！','嗨！','早上好！'],'category':'森林礼仪'},
+      {'id':'thanking','name':'说谢谢','icon':'🙏','sd':'小松鼠帮你捡起了掉在地上的松果，你该怎么说？','target':'说出感谢的话','examples':['谢谢！','谢谢你！'],'category':'森林礼仪'},
+      {'id':'asking_help','name':'请求帮助','icon':'🆘','sd':'你在做手工时不会用剪刀，想请大象老师帮忙，你应该怎么说？','target':'有礼貌地请求帮助','examples':['老师，这个我不太会，能教我吗？'],'category':'森林沟通'},
+      {'id':'waiting','name':'等待轮流','icon':'⏳','sd':'你和小朋友都想荡秋千，但是他正在荡。你应该怎么做？','target':'表达愿意等待','examples':['你先荡，我等一会儿。'],'category':'森林规则'},
+      {'id':'identify_feeling','name':'识别情绪','icon':'😀','sd':'小兔子收到了它期待很久的胡萝卜蛋糕。它现在是什么心情？','target':'识别并说出情绪','examples':['它好开心！'],'category':'情绪认知'},
+      {'id':'saying_no','name':'礼貌拒绝','icon':'🙅','sd':'小猴邀请你去摘香蕉，但你的作业还没写完。你应该怎么说？','target':'礼貌地拒绝并说明原因','examples':['对不起，我作业还没写完，下次再去吧。'],'category':'森林沟通'}
+    ]
+  },
+  'emotion': {
+    'id': 'emotion', 'name': '安抚情绪训练', 'icon': '🐰', 'color': '#E8927C', 'type': 'emotion',
+    'desc': '兔兔安抚员陪你识别和调节情绪',
+    'items': [
+      {'id':'identify_emotion','name':'情绪识别','icon':'🔍','desc':'和兔兔一起探索心里的小情绪','instruction':'你好呀，我是兔兔小暖。你现在心里住着哪只小动物呀？慢慢说，不着急。'},
+      {'id':'deep_breathing','name':'深呼吸练习','icon':'🌬️','desc':'像吹蒲公英一样轻轻呼吸','instruction':'来，我们像吹蒲公英一样呼吸。深深吸一口气——闻到了花香吗？'},
+      {'id':'grounding','name':'五感接地','icon':'🤚','desc':'像小树扎根一样回到当下','instruction':'我们来玩"五感游戏"。看看周围——告诉我你看到的5样东西。'},
+      {'id':'positive_self_talk','name':'积极自我对话','icon':'💬','desc':'用甜甜的话浇灌心里的小苗','instruction':'试试对自己说一句温暖的话吧。比如"我已经很棒了"。'},
+      {'id':'safe_place','name':'安全空间想象','icon':'🏖️','desc':'在心里建一个只属于你的秘密树洞','instruction':'来，闭上眼睛想象一下——森林深处有一个只属于你的秘密树洞...'},
+      {'id':'progressive_relax','name':'渐进式放松','icon':'🧘','desc':'像小猫伸懒腰一样逐一放松','instruction':'我们像小猫一样来放松身体吧！首先蜷起脚趾...然后松开～'}
+    ]
+  },
+  'sleep': {
+    'id': 'sleep', 'name': '睡眠提升训练', 'icon': '🦉', 'color': '#5B7A9A', 'type': 'sleep',
+    'desc': '猫头鹰眠眠带你慢慢进入甜甜的梦乡',
+    'items': [
+      {'id':'bedtime_routine','name':'睡前准备','icon':'🛁','desc':'像小熊准备冬眠一样建立睡前仪式','instruction':'咕～我是猫头鹰眠眠。在睡觉之前，你今晚睡前打算做什么呢？'},
+      {'id':'breath_sleep','name':'呼吸助眠','icon':'😮‍💨','desc':'4-7-8月光呼吸法','instruction':'来，我们试试月光呼吸法。吸气...1...2...3...4...'},
+      {'id':'body_scan','name':'身体扫描','icon':'🦶','desc':'像月光慢慢扫过身体每个角落','instruction':'躺在软软的被窝里，我们来让月光扫过全身。先从你的小脚趾开始...'},
+      {'id':'sleep_visualization','name':'睡眠想象','icon':'✨','desc':'想象躺在软软的云朵上','instruction':'闭上眼睛...想象你躺在一朵蒲公英上，轻轻飘起来了...'},
+      {'id':'sleep_hygiene','name':'睡眠卫生','icon':'📋','desc':'了解森林动物们的睡眠好习惯','instruction':'咕～你知道吗？森林里的动物们都有自己的睡眠秘诀。你平时睡眠习惯怎么样？'},
+      {'id':'calming_story','name':'放松故事','icon':'📖','desc':'听猫头鹰眠眠讲温柔的晚安故事','instruction':'准备好了吗？故事要开始了...月光洒在森林里，所有的小动物都准备睡觉了...'}
+    ]
+  }
+}
+
+# Write as JS file
+with open(r'C:\Users\飞\social-ace-app\www\modules-data.js', 'w', encoding='utf-8') as f:
+    f.write('// 星宝训练营 - 模块数据（独立运行版）\n')
+    f.write('const MODULES_DATA = ')
+    json.dump(modules, f, ensure_ascii=False)
+    f.write(';\n')
+
+print('Created modules-data.js')

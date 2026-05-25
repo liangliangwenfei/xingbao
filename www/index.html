@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>星宝训练营</title>
+<!-- PWA -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="星宝训练营">
+<meta name="theme-color" content="#4A9C5C">
+<meta name="description" content="为星宝提供社交、日常、表达、ABA、情绪、睡眠六大训练">
+<link rel="manifest" href="/static/manifest.json">
+<link rel="apple-touch-icon" href="/static/icon-192.png">
+<!-- 移动端底部安全区 -->
+<meta name="mobile-web-app-capable" content="yes">
+<style>
+:root {
+    --bg:#FFF8E7; --card:#FFFEF9; --text:#3E2F1C; --muted:#8B7355; --border:#E8DCC8;
+    --shadow:0 2px 12px rgba(62,47,28,0.05); --shadow-lg:0 8px 32px rgba(62,47,28,0.08);
+    --radius:16px; --radius-sm:12px;
+    --green:#4A9C5C; --green-light:#EDF7EF;
+    --blue:#5BA4D6; --blue-light:#EDF5FB;
+    --orange:#E8724A; --orange-light:#FDF0EB;
+    --purple:#8B6BAE; --purple-light:#F4F0F8;
+    --pink:#E8927C; --pink-light:#FDF3F0;
+    --red:#D94040; --red-light:#FFF5F5;
+    --gold:#E8A817; --gold-light:#FFF9EB;
+    --sidebar-w:220px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;background:transparent;color:var(--text);min-height:100vh;line-height:1.6;display:flex;position:relative;}
+/* 背景装饰动物 — 隐藏，改用SVG背景 */
+body::before, body::after{display:none;}
+a{color:inherit;text-decoration:none;}
+
+/* ====== 侧边栏 ====== */
+.sidebar{
+    width:var(--sidebar-w); min-height:100vh; background:linear-gradient(180deg, #1a3a2a 0%, #2D5A3D 100%); color:#c8e0d0;
+    position:fixed; left:0; top:0; bottom:0; z-index:200; overflow-y:auto;
+    display:flex; flex-direction:column; transition:transform 0.25s;
+    font-size:14px; border-right:3px solid #4A9C5C;
+}
+.sidebar.collapsed{transform:translateX(calc(-1*var(--sidebar-w)));}
+.sidebar-header{padding:16px 14px; border-bottom:1px solid #3a6a4a; display:flex; align-items:center; gap:8px; position:relative;}
+.sidebar-header::after{content:'🐾🐾'; position:absolute; bottom:-6px; right:12px; font-size:14px; opacity:0.4;}
+.sidebar-header .logo-icon{font-size:22px;}
+.sidebar-header .logo-text{font-size:16px; font-weight:700; color:#fff;}
+.sidebar-header .baby-name{font-size:11px; color:#a0c8a8; margin-top:2px;}
+.sidebar-nav{flex:1; padding:8px 0;}
+.nav-section{padding:6px 0;}
+.nav-section-title{font-size:10px; text-transform:uppercase; letter-spacing:1px; color:#7aaa88; padding:8px 16px 4px;}
+.nav-section-title::before{content:'🌿 ';}
+.nav-item{
+    display:flex; align-items:center; gap:8px; padding:9px 16px; cursor:pointer;
+    transition:all 0.15s; border-left:3px solid transparent; color:#b8d8c0;
+}
+.nav-item:hover{background:#2a4a35; color:#fff;}
+.nav-item.active{background:#2a4a35; border-left-color:#F5A623; color:#fff;}
+.nav-item.active::after{content:'🐾'; margin-left:auto; font-size:12px;}
+.nav-item .nav-icon{font-size:16px; width:22px; text-align:center;}
+.nav-item .nav-badge{font-size:10px; background:var(--gold); color:#333; padding:1px 7px; border-radius:10px; margin-left:auto;}
+.nav-sub{display:none; padding-left:12px;}
+.nav-sub.open{display:block;}
+.nav-sub .nav-item{padding:7px 16px; font-size:13px;}
+.sidebar-footer{padding:12px 16px; border-top:1px solid #3a6a4a; font-size:11px; color:#7aaa88; display:flex; justify-content:space-between;}
+.sidebar-footer span{cursor:pointer;}
+.sidebar-footer span:hover{color:#fff;}
+
+/* 汉堡按钮 */
+.hamburger{
+    position:fixed; top:12px; left:12px; z-index:210; width:36px; height:36px;
+    border-radius:50%; background:#2D5A3D; color:#fff; border:2px solid #4A9C5C; font-size:18px;
+    cursor:pointer; display:flex; align-items:center; justify-content:center;
+    transition:left 0.25s;
+}
+.sidebar.collapsed + .hamburger{left:12px;}
+.sidebar:not(.collapsed) + .hamburger{left:calc(var(--sidebar-w) + 12px);}
+
+/* ====== 主内容区 ====== */
+.main-content{
+    margin-left:var(--sidebar-w); flex:1; min-height:100vh; transition:margin 0.25s;
+    padding:16px 20px; max-width:calc(100vw - var(--sidebar-w)); position:relative; z-index:1;
+}
+.sidebar.collapsed ~ .main-content{margin-left:0; max-width:100vw;}
+.sidebar.collapsed ~ .hamburger{left:12px;}
+
+.top-bar{
+    background:var(--card); border-bottom:2px solid #E8DCC8;
+    padding:8px 16px; display:flex; align-items:center; justify-content:space-between;
+    border-radius:var(--radius-sm); margin-bottom:16px; position:relative; overflow:hidden;
+}
+.top-bar::after{content:'🌿 🍃 🌿'; position:absolute; right:60px; top:-4px; font-size:16px; opacity:0.2; pointer-events:none;}
+.top-stats{display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
+.stat-badge{font-size:11px; color:var(--muted); background:var(--bg); padding:4px 10px; border-radius:14px; display:flex; align-items:center; gap:4px;}
+.coin-badge{font-size:12px; background:var(--gold-light); color:#8B6914; padding:4px 12px; border-radius:14px; font-weight:600;}
+
+/* ====== 页面容器 ====== */
+.page{display:none;}
+.page.active{display:block;}
+
+/* ====== 模块/项目卡片 ====== */
+.module-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:14px;}
+@media(max-width:700px){.module-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:400px){.module-grid{grid-template-columns:1fr;}}
+.mod-card{
+    background:var(--card); border:3px solid var(--border); border-radius:var(--radius);
+    padding:22px 14px; text-align:center; cursor:pointer; transition:all 0.2s; position:relative; overflow:hidden;
+}
+.mod-card::after{content:''; position:absolute; bottom:0; left:0; right:0; height:4px; background:var(--green); transform:scaleX(0); transition:transform 0.2s;}
+.mod-card:hover{transform:translateY(-3px); box-shadow:var(--shadow-lg); border-color:#4A9C5C;}
+.mod-card:hover::after{transform:scaleX(1);}
+.mod-card.selected{border-color:#4A9C5C; background:var(--green-light);}
+.mod-card.selected::after{transform:scaleX(1);}
+.mod-card .mod-icon{font-size:44px; margin-bottom:8px; display:block;}
+.mod-card .mod-name{font-size:16px; font-weight:700;}
+.mod-card .mod-count{font-size:11px; color:var(--muted); margin-top:2px;}
+
+.item-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:14px 0;}
+@media(max-width:500px){.item-grid{grid-template-columns:repeat(2,1fr);}}
+.item-card{
+    background:var(--card); border:2px solid var(--border); border-radius:var(--radius-sm);
+    padding:16px 10px; text-align:center; cursor:pointer; transition:all 0.15s; position:relative;
+}
+.item-card:hover{border-color:var(--blue); transform:translateY(-2px); box-shadow:var(--shadow);}
+.item-card.chosen{border-color:var(--blue); background:var(--blue-light); box-shadow:0 0 0 4px rgba(91,164,214,0.12);}
+.item-card .item-icon{font-size:32px; display:block; margin-bottom:4px;}
+.item-card .item-name{font-size:13px; font-weight:600;}
+
+.btn-start{
+    display:block; width:100%; max-width:300px; margin:12px auto; padding:13px;
+    font-size:15px; font-weight:600; color:#fff; background:var(--green);
+    border:none; border-radius:24px; cursor:pointer;
+    box-shadow:0 3px 12px rgba(74,156,92,0.25);
+}
+.btn-start:disabled{background:#ccc; cursor:not-allowed; box-shadow:none;}
+
+/* ====== 训练界面 ====== */
+.train-header{
+    background:var(--card); border-radius:var(--radius) var(--radius) 0 0;
+    padding:12px 16px; border:1px solid var(--border); border-bottom:none;
+    display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px;
+}
+.train-header .avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;color:#fff;}
+.train-header .score-num{font-size:22px;font-weight:700;color:var(--orange);}
+.aba-bar{display:flex;gap:8px;padding:8px 16px;background:var(--purple-light);border-left:1px solid var(--border);border-right:1px solid var(--border);font-size:11px;flex-wrap:wrap;}
+.aba-stat{background:#fff;padding:3px 8px;border-radius:10px;font-weight:600;}
+
+.chat-area{
+    background:var(--card); border:1px solid var(--border); border-top:none; border-bottom:none;
+    padding:12px 16px; min-height:360px; max-height:50vh; overflow-y:auto;
+    display:flex; flex-direction:column; gap:8px;
+}
+.chat-area::-webkit-scrollbar{width:4px;}
+.chat-area::-webkit-scrollbar-thumb{background:#ddd;border-radius:8px;}
+.msg{display:flex;gap:8px;max-width:88%;animation:fadeIn 0.25s;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}}
+.msg.ai{align-self:flex-start;}
+.msg.user{align-self:flex-end;flex-direction:row-reverse;}
+.msg .bubble{padding:9px 13px;border-radius:15px;font-size:13.5px;line-height:1.45;word-break:break-word;}
+.msg.ai .bubble{background:#f0f0f0;border-bottom-left-radius:4px;}
+.msg.user .bubble{background:var(--green);color:#fff;border-bottom-right-radius:4px;}
+.msg .msg-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+
+.eval-toast{align-self:center;background:var(--orange-light);border:1px solid #fdd4b8;border-radius:14px;padding:4px 10px;font-size:11px;color:var(--orange);}
+.badge-toast{align-self:center;background:linear-gradient(135deg,#fff9c4,#fff176);border:1px solid #f9a825;border-radius:14px;padding:7px 12px;font-size:11px;color:#5d4037;font-weight:600;animation:pop 0.5s;}
+@keyframes pop{0%{transform:scale(0.5);opacity:0;}60%{transform:scale(1.08);}100%{transform:scale(1);opacity:1;}}
+
+/* 输入区 */
+.input-area{background:var(--card);border:1px solid var(--border);border-radius:0 0 var(--radius) var(--radius);padding:10px 16px;}
+.input-row{display:flex;gap:6px;align-items:center;}
+.input-row input{flex:1;padding:9px 14px;border:2px solid var(--border);border-radius:20px;font-size:13.5px;outline:none;font-family:inherit;}
+.input-row input:focus{border-color:var(--green);}
+.btn-icon{width:36px;height:36px;border-radius:50%;border:none;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.15s;}
+.btn-send{background:var(--green);color:#fff;}
+.btn-send:disabled{background:#ccc;}
+.btn-mic{background:#f0f0f0;}
+.btn-mic.recording{background:var(--red);color:#fff;animation:pulse 1s infinite;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(217,64,64,0.4);}50%{box-shadow:0 0 0 10px rgba(217,64,64,0);}}
+.btn-speaker{background:#f0f0f0;}
+.btn-speaker.on{background:var(--blue);color:#fff;}
+.action-row{display:flex;gap:6px;margin-top:6px;}
+.btn-action{flex:1;padding:7px 10px;border-radius:16px;border:1.5px solid var(--border);background:var(--card);font-size:11px;cursor:pointer;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:3px;}
+.btn-hint{border-color:#fdd4b8;color:var(--orange);}
+.btn-end{border-color:#f5c6cb;color:var(--red);}
+
+/* ====== 模态框 ====== */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:300;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--card);border-radius:var(--radius);padding:24px 20px;max-width:440px;width:100%;text-align:center;box-shadow:var(--shadow-lg);max-height:90vh;overflow-y:auto;}
+.modal .sum-icon{font-size:40px;margin-bottom:8px;}
+.modal .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:12px 0;}
+.modal .stat-item{background:var(--bg);padding:8px 6px;border-radius:var(--radius-sm);}
+.modal .stat-item .val{font-size:18px;font-weight:700;color:var(--green);}
+.modal .stat-item .lbl{font-size:10px;color:var(--muted);}
+.badges-row{display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin:10px 0;}
+.badge-tag{background:var(--green-light);border:1px solid #b8d8b8;padding:4px 9px;border-radius:12px;font-size:10px;font-weight:500;}
+.badge-tag.new-badge{background:#FFF9C4;border-color:#E8A817;animation:pop 0.5s;}
+.btn-restart{padding:10px 24px;font-size:14px;font-weight:600;color:#fff;background:var(--green);border:none;border-radius:20px;cursor:pointer;font-family:inherit;margin-top:8px;}
+
+/* ====== 宝宝档案页 ====== */
+.profile-card{background:var(--card);border-radius:var(--radius);padding:20px;border:1px solid var(--border);margin-bottom:14px;}
+.profile-card h3{font-size:16px;margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.form-group{margin-bottom:10px;}
+.form-group label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:3px;}
+.form-group input,.form-group textarea,.form-group select{
+    width:100%;padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;
+    font-size:13px;font-family:inherit;outline:none;
+}
+.form-group input:focus,.form-group textarea:focus{border-color:var(--blue);}
+.form-group textarea{min-height:70px;resize:vertical;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.btn-save{
+    padding:10px 24px;font-size:14px;font-weight:600;color:#fff;
+    background:var(--blue);border:none;border-radius:20px;cursor:pointer;font-family:inherit;
+}
+.profile-display{line-height:2;font-size:13px;}
+.profile-display b{color:var(--muted);}
+
+/* ====== 情绪日记 ====== */
+.emotion-log-form{background:var(--card);border-radius:var(--radius);padding:16px;border:1px solid var(--border);margin-bottom:14px;}
+.emotion-list .entry{
+    background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);
+    padding:12px 14px;margin-bottom:8px;display:flex;gap:12px;align-items:flex-start;
+}
+.entry-emoji{font-size:28px;}
+.entry-info{flex:1;font-size:13px;}
+.entry-info .entry-time{font-size:11px;color:var(--muted);}
+.emotion-stats{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0;}
+.emotion-chart-bar{display:flex;align-items:center;gap:6px;font-size:12px;}
+.emotion-chart-bar .bar{height:16px;border-radius:8px;min-width:4px;transition:width 0.3s;}
+
+/* ====== 奖励商店 ====== */
+.reward-shop{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+@media(max-width:500px){.reward-shop{grid-template-columns:repeat(2,1fr);}}
+.reward-item{
+    background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);
+    padding:14px 10px;text-align:center;
+}
+.reward-item .reward-icon{font-size:32px;margin-bottom:6px;}
+.reward-item .reward-name{font-size:13px;font-weight:600;}
+.reward-item .reward-cost{font-size:11px;color:var(--gold);font-weight:600;margin:4px 0;}
+.reward-item .btn-redeem{
+    padding:6px 16px;font-size:11px;font-weight:600;color:#fff;
+    background:var(--gold);border:none;border-radius:14px;cursor:pointer;font-family:inherit;
+}
+.reward-item .btn-redeem:disabled{background:#ccc;}
+
+.add-reward-form{background:var(--card);border-radius:var(--radius);padding:14px;border:1px solid var(--border);margin-bottom:12px;}
+.add-reward-form h4{font-size:13px;margin-bottom:8px;}
+
+/* ====== 响应式 ====== */
+@media(max-width:700px){
+    .sidebar{transform:translateX(calc(-1*var(--sidebar-w)));}
+    .sidebar.open-mobile{transform:translateX(0);}
+    .main-content{margin-left:0;max-width:100vw;}
+    .hamburger{left:12px;}
+}
+/* ====== 移动端底部导航栏 ====== */
+.mobile-nav{
+    display:none; position:fixed; bottom:0; left:0; right:0; z-index:250;
+    background:#FFFEF9; border-top:2px solid #E8DCC8; padding:6px 8px env(safe-area-inset-bottom,8px);
+    justify-content:space-around; align-items:center; box-shadow:0 -4px 16px rgba(0,0,0,0.08);
+}
+.mobile-nav .mnav-item{
+    display:flex; flex-direction:column; align-items:center; gap:2px;
+    font-size:10px; color:var(--muted); cursor:pointer; padding:4px 8px; border-radius:10px;
+    transition:all 0.15s; min-width:52px;
+}
+.mobile-nav .mnav-item.active{color:#4A9C5C; font-weight:600;}
+.mobile-nav .mnav-item .mnav-icon{font-size:22px;}
+/* 安装提示条 */
+.install-banner{
+    display:none; position:fixed; top:0; left:0; right:0; z-index:300;
+    background:linear-gradient(135deg,#4A9C5C,#66BB6A); color:#fff;
+    padding:12px 16px; text-align:center; font-size:14px; font-weight:600;
+    align-items:center; justify-content:center; gap:10px;
+}
+.install-banner.show{display:flex;}
+.install-banner .btn-install{
+    background:#fff; color:#4A9C5C; border:none; padding:6px 16px; border-radius:16px;
+    font-weight:700; font-size:13px; cursor:pointer; font-family:inherit;
+}
+.install-banner .btn-close{background:none; border:none; color:#fff; font-size:18px; cursor:pointer;}
+/* 移动端主内容适配 */
+@media(max-width:700px){
+    .main-content{margin-left:0; max-width:100vw; padding:12px 10px 80px;}
+    .sidebar{display:none;}
+    .hamburger{display:none;}
+    .mobile-nav{display:flex;}
+    .module-grid{grid-template-columns:repeat(2,1fr); gap:10px;}
+    .item-grid{grid-template-columns:repeat(2,1fr);}
+    .train-header{flex-wrap:wrap; font-size:12px;}
+    .chat-area{min-height:300px; max-height:42vh;}
+    .modal{max-width:95vw; padding:20px 16px;}
+    .top-bar{padding:6px 12px; font-size:12px;}
+    .mod-card{padding:16px 10px;}
+    .mod-card .mod-icon{font-size:36px;}
+    .reward-shop{grid-template-columns:repeat(2,1fr);}
+    /* 训练中主内容全屏 */
+    #trainActiveView{position:fixed; inset:0; z-index:150; background:var(--bg); overflow-y:auto; padding-bottom:100px;}
+}
+@media(max-width:400px){
+    .module-grid{grid-template-columns:1fr 1fr; gap:8px;}
+    .mod-card{padding:14px 8px;}
+    .mod-card .mod-icon{font-size:30px;}
+}
+</style>
+</head>
+<body>
+
+<!-- ====== 森林动物世界背景 ====== -->
+<div style="position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;">
+<svg width="100%" height="100%" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- 天空渐变 -->
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#87CEEB"/>
+      <stop offset="60%" stop-color="#B8E4F0"/>
+      <stop offset="100%" stop-color="#E8F4E8"/>
+    </linearGradient>
+    <!-- 山丘渐变 -->
+    <linearGradient id="hill1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#7CB342"/>
+      <stop offset="100%" stop-color="#558B2F"/>
+    </linearGradient>
+    <linearGradient id="hill2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#8BC34A"/>
+      <stop offset="100%" stop-color="#689F38"/>
+    </linearGradient>
+    <linearGradient id="hill3" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#9CCC65"/>
+      <stop offset="100%" stop-color="#7CB342"/>
+    </linearGradient>
+    <!-- 大树模板 -->
+    <g id="tree">
+      <rect x="-4" y="0" width="8" height="40" fill="#8D6E63" rx="3"/>
+      <ellipse cx="0" cy="-8" rx="28" ry="32" fill="#388E3C"/>
+      <ellipse cx="-10" cy="-2" rx="20" ry="26" fill="#43A047"/>
+      <ellipse cx="12" cy="-4" rx="22" ry="28" fill="#2E7D32"/>
+    </g>
+    <g id="tree-small">
+      <rect x="-3" y="0" width="6" height="28" fill="#8D6E63" rx="2"/>
+      <ellipse cx="0" cy="-5" rx="18" ry="22" fill="#43A047"/>
+      <ellipse cx="6" cy="-2" rx="14" ry="18" fill="#2E7D32"/>
+    </g>
+    <g id="pine">
+      <rect x="-3" y="0" width="6" height="24" fill="#6D4C41" rx="2"/>
+      <polygon points="0,-48 -20,-10 -8,-10 -24,18 -6,18 0,8 6,18 24,18 8,-10 20,-10" fill="#2E7D32"/>
+      <polygon points="0,-48 -14,-16 -5,-16 -18,12 -4,12 0,4 4,12 18,12 5,-16 14,-16" fill="#388E3C"/>
+    </g>
+    <!-- 小兔子 -->
+    <g id="rabbit">
+      <ellipse cx="0" cy="0" rx="8" ry="10" fill="#E0C8A8"/>
+      <circle cx="0" cy="-10" r="6" fill="#E0C8A8"/>
+      <ellipse cx="-4" cy="-15" rx="2" ry="7" fill="#F0D8C0"/>
+      <ellipse cx="4" cy="-14" rx="2" ry="6" fill="#F0D8C0"/>
+      <circle cx="-2" cy="-11" r="1.5" fill="#333"/>
+      <circle cx="3" cy="-11" r="1.5" fill="#333"/>
+      <circle cx="0" cy="-8" r="1" fill="#F8BBD0"/>
+      <circle cx="3" cy="5" r="3" fill="#E0C8A8"/>
+    </g>
+    <!-- 小鸟 -->
+    <g id="bird">
+      <ellipse cx="0" cy="0" rx="6" ry="4" fill="#EF5350"/>
+      <circle cx="6" cy="-2" r="3.5" fill="#EF5350"/>
+      <circle cx="7" cy="-3" r="1" fill="#333"/>
+      <polygon points="10,-2 15,-1 10,0" fill="#FF8A65"/>
+      <path d="M-6,0 Q-10,-6 -4,-4" stroke="#EF5350" stroke-width="1.5" fill="none"/>
+      <path d="M-4,1 Q-9,-4 -2,-2" stroke="#EF5350" stroke-width="1" fill="none"/>
+    </g>
+    <!-- 蝴蝶 -->
+    <g id="butterfly">
+      <ellipse cx="-4" cy="0" rx="5" ry="3" fill="#FFB74D" transform="rotate(-20)"/>
+      <ellipse cx="4" cy="0" rx="5" ry="3" fill="#FFB74D" transform="rotate(20)"/>
+      <ellipse cx="-3" cy="0" rx="3" ry="2" fill="#FFF176" transform="rotate(-15)"/>
+      <ellipse cx="3" cy="0" rx="3" ry="2" fill="#FFF176" transform="rotate(15)"/>
+      <rect x="-1" y="-1" width="2" height="6" rx="1" fill="#5D4037"/>
+    </g>
+    <!-- 小花 -->
+    <g id="flower">
+      <circle cx="0" cy="0" r="3" fill="#FFEB3B"/>
+      <circle cx="4" cy="-1" r="2.5" fill="#FF9800"/>
+      <circle cx="-4" cy="-1" r="2.5" fill="#FF9800"/>
+      <circle cx="3" cy="3" r="2.5" fill="#FF9800"/>
+      <circle cx="-3" cy="3" r="2.5" fill="#FF9800"/>
+      <circle cx="0" cy="5" r="2" fill="#FFEB3B"/>
+    </g>
+    <!-- 云朵 -->
+    <g id="cloud">
+      <ellipse cx="0" cy="0" rx="40" ry="18" fill="white" opacity="0.8"/>
+      <ellipse cx="-25" cy="4" rx="25" ry="14" fill="white" opacity="0.8"/>
+      <ellipse cx="25" cy="4" rx="28" ry="15" fill="white" opacity="0.8"/>
+      <ellipse cx="-10" cy="-8" rx="22" ry="16" fill="white" opacity="0.9"/>
+      <ellipse cx="15" cy="-6" rx="20" ry="14" fill="white" opacity="0.9"/>
+    </g>
+    <!-- 小鹿 -->
+    <g id="deer">
+      <ellipse cx="0" cy="5" rx="12" ry="8" fill="#C69C6D"/>
+      <circle cx="-4" cy="-6" r="7" fill="#C69C6D"/>
+      <rect x="-2" y="-6" width="3" height="14" fill="#A0764A"/>
+      <line x1="-2" y1="-20" x2="0" y2="-10" stroke="#A0764A" stroke-width="2"/>
+      <line x1="3" y1="-20" x2="2" y2="-10" stroke="#A0764A" stroke-width="2"/>
+      <circle cx="-7" cy="-7" r="1.5" fill="#333"/>
+      <circle cx="-1" cy="-7" r="1.2" fill="#333"/>
+      <rect x="-14" y="10" width="4" height="10" rx="2" fill="#A0764A"/>
+      <rect x="6" y="10" width="4" height="10" rx="2" fill="#A0764A"/>
+      <rect x="-6" y="12" width="4" height="10" rx="2" fill="#A0764A"/>
+      <rect x="10" y="12" width="4" height="10" rx="2" fill="#A0764A"/>
+    </g>
+  </defs>
+
+  <!-- 天空 -->
+  <rect width="1440" height="900" fill="url(#sky)"/>
+
+  <!-- 太阳 -->
+  <circle cx="1200" cy="100" r="50" fill="#FFF176" opacity="0.7"/>
+  <circle cx="1200" cy="100" r="70" fill="#FFF176" opacity="0.2"/>
+  <circle cx="1200" cy="100" r="90" fill="#FFF176" opacity="0.08"/>
+
+  <!-- 云朵 -->
+  <use href="#cloud" x="200" y="80"/>
+  <use href="#cloud" x="700" y="50" transform="scale(0.8)"/>
+  <use href="#cloud" x="1000" y="100" transform="scale(0.9)"/>
+  <use href="#cloud" x="1300" y="60" transform="scale(0.7)"/>
+
+  <!-- 小鸟 -->
+  <use href="#bird" x="350" y="120"/>
+  <use href="#bird" x="500" y="80" transform="scale(0.8)"/>
+  <use href="#bird" x="850" y="140"/>
+  <use href="#bird" x="1100" y="90" transform="scale(0.7)"/>
+
+  <!-- 蝴蝶 -->
+  <use href="#butterfly" x="400" y="300"/>
+  <use href="#butterfly" x="900" y="250" transform="scale(0.8)"/>
+  <use href="#butterfly" x="1200" y="350"/>
+
+  <!-- 远山 -->
+  <path d="M0 500 Q200 380 400 460 Q600 350 800 440 Q1000 370 1200 450 Q1350 400 1440 430 L1440 900 L0 900Z" fill="url(#hill3)" opacity="0.6"/>
+
+  <!-- 中山 -->
+  <path d="M0 580 Q180 480 360 540 Q540 440 720 520 Q900 450 1080 530 Q1260 470 1440 510 L1440 900 L0 900Z" fill="url(#hill2)" opacity="0.8"/>
+
+  <!-- 近山 -->
+  <path d="M0 650 Q200 560 400 620 Q600 540 800 610 Q1000 550 1200 620 Q1350 580 1440 600 L1440 900 L0 900Z" fill="url(#hill1)"/>
+
+  <!-- 地面草地 -->
+  <rect x="0" y="700" width="1440" height="200" fill="#558B2F"/>
+  <rect x="0" y="720" width="1440" height="180" fill="#4CAF50"/>
+
+  <!-- 松树（远景） -->
+  <use href="#pine" x="100" y="560" transform="scale(1.2)"/>
+  <use href="#pine" x="250" y="540" transform="scale(1)"/>
+  <use href="#pine" x="450" y="570" transform="scale(1.4)"/>
+  <use href="#pine" x="600" y="530" transform="scale(1.1)"/>
+  <use href="#pine" x="780" y="550" transform="scale(1.3)"/>
+  <use href="#pine" x="950" y="560" transform="scale(1)"/>
+  <use href="#pine" x="1100" y="540" transform="scale(1.5)"/>
+  <use href="#pine" x="1300" y="570" transform="scale(1.2)"/>
+
+  <!-- 阔叶树 -->
+  <use href="#tree" x="180" y="620" transform="scale(1.3)"/>
+  <use href="#tree" x="380" y="600" transform="scale(1.5)"/>
+  <use href="#tree" x="550" y="630" transform="scale(1.1)"/>
+  <use href="#tree" x="720" y="590" transform="scale(1.6)"/>
+  <use href="#tree" x="880" y="610" transform="scale(1.4)"/>
+  <use href="#tree" x="1050" y="620" transform="scale(1.2)"/>
+  <use href="#tree" x="1250" y="600" transform="scale(1.5)"/>
+  <use href="#tree" x="1380" y="630" transform="scale(1.1)"/>
+
+  <!-- 小树 -->
+  <use href="#tree-small" x="80" y="680" transform="scale(1)"/>
+  <use href="#tree-small" x="300" y="660" transform="scale(1.2)"/>
+  <use href="#tree-small" x="500" y="670" transform="scale(0.9)"/>
+  <use href="#tree-small" x="680" y="650" transform="scale(1.1)"/>
+  <use href="#tree-small" x="850" y="680" transform="scale(1)"/>
+  <use href="#tree-small" x="1020" y="660" transform="scale(1.3)"/>
+  <use href="#tree-small" x="1180" y="670" transform="scale(0.9)"/>
+  <use href="#tree-small" x="1350" y="650" transform="scale(1.2)"/>
+
+  <!-- 小鹿 -->
+  <use href="#deer" x="320" y="660" transform="scale(1.2)"/>
+  <use href="#deer" x="750" y="640" transform="scale(1)"/>
+
+  <!-- 兔子 -->
+  <use href="#rabbit" x="160" y="700" transform="scale(1.3)"/>
+  <use href="#rabbit" x="480" y="710"/>
+  <use href="#rabbit" x="900" y="690" transform="scale(1.1)"/>
+  <use href="#rabbit" x="1150" y="705" transform="scale(0.9)"/>
+
+  <!-- 小花 -->
+  <use href="#flower" x="140" y="710"/>
+  <use href="#flower" x="350" y="715"/>
+  <use href="#flower" x="520" y="705"/>
+  <use href="#flower" x="670" y="720"/>
+  <use href="#flower" x="830" y="710"/>
+  <use href="#flower" x="980" y="718"/>
+  <use href="#flower" x="1120" y="708"/>
+  <use href="#flower" x="1280" y="715"/>
+
+  <!-- 前景草丛 -->
+  <ellipse cx="50" cy="740" rx="60" ry="20" fill="#66BB6A" opacity="0.7"/>
+  <ellipse cx="250" cy="735" rx="50" ry="18" fill="#81C784" opacity="0.6"/>
+  <ellipse cx="440" cy="745" rx="70" ry="22" fill="#66BB6A" opacity="0.7"/>
+  <ellipse cx="650" cy="738" rx="55" ry="19" fill="#81C784" opacity="0.6"/>
+  <ellipse cx="860" cy="742" rx="65" ry="21" fill="#66BB6A" opacity="0.7"/>
+  <ellipse cx="1060" cy="735" rx="50" ry="18" fill="#81C784" opacity="0.6"/>
+  <ellipse cx="1280" cy="740" rx="60" ry="20" fill="#66BB6A" opacity="0.7"/>
+</svg>
+</div>
+
+<!-- 侧边栏 -->
+<nav class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+        <span class="logo-icon">🤝</span>
+        <div>
+            <div class="logo-text">星宝训练营</div>
+            <div class="baby-name" id="sidebarBabyName">未设置宝宝信息</div>
+        </div>
+    </div>
+    <div class="sidebar-nav">
+        <div class="nav-section">
+            <div class="nav-section-title">主菜单</div>
+            <div class="nav-item active" data-page="home"><span class="nav-icon">🏠</span>首页</div>
+        </div>
+        <div class="nav-section">
+            <div class="nav-section-title">训练中心</div>
+            <div class="nav-item nav-parent" data-toggle="trainSub"><span class="nav-icon">🎮</span>开始训练</div>
+            <div class="nav-sub" id="trainSub">
+                <div class="nav-item" data-page="train" data-module="social"><span class="nav-icon">🤝</span>社交对话</div>
+                <div class="nav-item" data-page="train" data-module="daily_life"><span class="nav-icon">🏠</span>日常生活</div>
+                <div class="nav-item" data-page="train" data-module="expression"><span class="nav-icon">🗣️</span>口语表达</div>
+                <div class="nav-item" data-page="train" data-module="aba"><span class="nav-icon">📋</span>ABA训练</div>
+                <div class="nav-item" data-page="train" data-module="emotion"><span class="nav-icon">💙</span>安抚情绪</div>
+                <div class="nav-item" data-page="train" data-module="sleep"><span class="nav-icon">🌙</span>睡眠提升</div>
+            </div>
+        </div>
+        <div class="nav-section">
+            <div class="nav-section-title">记录中心</div>
+            <div class="nav-item" data-page="profile"><span class="nav-icon">👶</span>宝宝档案</div>
+            <div class="nav-item" data-page="emotionDiary"><span class="nav-icon">📝</span>情绪日记</div>
+            <div class="nav-item" data-page="rewardShop"><span class="nav-icon">🎁</span>奖励商店 <span class="nav-badge" id="coinNav">🪙0</span></div>
+        </div>
+    </div>
+    <div class="sidebar-footer">
+        <span onclick="toggleSidebar()">◀ 收起</span>
+        <span id="modeTag">🎭 演示</span>
+    </div>
+</nav>
+
+<button class="hamburger" onclick="toggleSidebar()">☰</button>
+
+<!-- 主内容区 -->
+<div class="main-content" id="mainContent">
+
+    <!-- 顶部状态栏 -->
+    <div class="top-bar" id="topBar">
+        <div style="font-weight:600;font-size:14px;" id="pageTitle">🦏 动物世界</div>
+        <div class="top-stats">
+            <span class="stat-badge">📊 <b id="topSessions">0</b>次训练</span>
+            <span class="stat-badge">🏆 <b id="topBadges">0</b>徽章</span>
+            <span class="coin-badge">🪙 <b id="topCoins">0</b> 金币</span>
+        </div>
+    </div>
+
+    <!-- ====== 首页 ====== -->
+    <div class="page active" id="page-home">
+        <div style="text-align:center;padding:20px 0;">
+            <div style="margin-bottom:14px;" id="homeEmoji">
+    <svg width="140" height="140" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <!-- 身体 -->
+        <ellipse cx="58" cy="75" rx="40" ry="30" fill="#9E9E9E"/>
+        <ellipse cx="58" cy="72" rx="36" ry="26" fill="#BDBDBD"/>
+        <!-- 头 -->
+        <ellipse cx="52" cy="48" rx="28" ry="26" fill="#BDBDBD"/>
+        <!-- 大耳朵 -->
+        <ellipse cx="32" cy="35" rx="12" ry="14" fill="#BDBDBD"/>
+        <ellipse cx="32" cy="35" rx="8" ry="10" fill="#E8B4B8"/>
+        <ellipse cx="72" cy="35" rx="12" ry="14" fill="#BDBDBD"/>
+        <ellipse cx="72" cy="35" rx="8" ry="10" fill="#E8B4B8"/>
+        <!-- 角 -->
+        <ellipse cx="47" cy="28" rx="5" ry="8" fill="#FFD54F"/>
+        <ellipse cx="57" cy="30" rx="4" ry="6" fill="#FFD54F"/>
+        <!-- 大眼睛 -->
+        <ellipse cx="42" cy="46" rx="7" ry="8" fill="#fff"/>
+        <circle cx="44" cy="45" r="4" fill="#333"/>
+        <circle cx="45" cy="44" r="1.5" fill="#fff"/>
+        <ellipse cx="62" cy="46" rx="7" ry="8" fill="#fff"/>
+        <circle cx="64" cy="45" r="4" fill="#333"/>
+        <circle cx="65" cy="44" r="1.5" fill="#fff"/>
+        <!-- 腮红 -->
+        <ellipse cx="34" cy="52" rx="5" ry="3" fill="#F8BBD0" opacity="0.6"/>
+        <ellipse cx="70" cy="52" rx="5" ry="3" fill="#F8BBD0" opacity="0.6"/>
+        <!-- 微笑 -->
+        <path d="M48 55 Q56 64 64 55" stroke="#555" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <!-- 小短腿 -->
+        <rect x="30" y="92" width="12" height="14" rx="6" fill="#BDBDBD"/>
+        <rect x="48" y="94" width="13" height="13" rx="6" fill="#9E9E9E"/>
+        <rect x="66" y="93" width="12" height="14" rx="6" fill="#BDBDBD"/>
+        <!-- 小尾巴 -->
+        <path d="M95 68 Q105 62 100 56" stroke="#9E9E9E" stroke-width="3" fill="none" stroke-linecap="round"/>
+        <!-- 肚皮 -->
+        <ellipse cx="56" cy="80" rx="20" ry="14" fill="#E0E0E0"/>
+    </svg>
+</div>
+            <h2 id="homeGreeting">欢迎来到星宝训练营</h2>
+            <p style="color:var(--muted);font-size:14px;margin-bottom:20px;">选择一个训练模块开始吧</p>
+        </div>
+        <div class="module-grid" id="homeModules"></div>
+        <div style="text-align:center;margin-top:16px;">
+            <p style="font-size:12px;color:var(--muted);">
+                💡 提示：先到 <a href="javascript:navTo('profile')" style="color:var(--blue);">👶 宝宝档案</a> 填写信息，再到训练中心开始练习
+            </p>
+        </div>
+    </div>
+
+    <!-- ====== 训练页 ====== -->
+    <div class="page" id="page-train">
+        <div id="trainSelectView">
+            <h3 style="text-align:center;margin:10px 0;" id="trainModuleTitle">选择训练项目</h3>
+            <div class="item-grid" id="trainItemGrid"></div>
+            <button class="btn-start" id="btnStart" disabled onclick="startTraining()">开始训练 →</button>
+        </div>
+        <div id="trainActiveView" style="display:none;">
+            <div class="train-header">
+                <div style="display:flex;align-items:center;gap:8px;">
+                    <div class="avatar" id="trainAvatar">🤖</div>
+                    <div>
+                        <div style="font-weight:600;" id="trainTitle"></div>
+                        <div style="font-size:10px;color:var(--muted);" id="trainSubtitle"></div>
+                    </div>
+                </div>
+                <div style="text-align:right;"><div class="score-num" id="trainScore">0</div><div style="font-size:9px;color:var(--muted);">积分</div></div>
+            </div>
+            <div class="aba-bar" id="abaBar" style="display:none;"></div>
+            <div class="chat-area" id="chatArea"><div style="text-align:center;color:var(--muted);padding:30px;">准备开始...</div></div>
+            <div class="input-area">
+                <div class="input-row">
+                    <button class="btn-icon btn-mic" id="btnMic" onclick="toggleVoice()">🎤</button>
+                    <input type="text" id="msgInput" placeholder="输入你想说的话..." onkeydown="if(event.key==='Enter')sendMessage()">
+                    <button class="btn-icon btn-speaker" id="btnSpeaker" onclick="toggleSpeaker()">🔊</button>
+                    <button class="btn-icon btn-send" id="btnSend" onclick="sendMessage()">➤</button>
+                </div>
+                <div class="action-row">
+                    <button class="btn-action btn-hint" onclick="getHint()">💡 提示</button>
+                    <button class="btn-action" onclick="endTraining()" style="color:var(--muted);">📋 结束</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ====== 宝宝档案页 ====== -->
+    <div class="page" id="page-profile">
+        <div class="profile-card" id="profileView" style="display:none;">
+            <h3>👶 宝宝信息</h3>
+            <div class="profile-display" id="profileDisplay"></div>
+            <button class="btn-save" style="margin-top:10px;background:var(--orange);" onclick="editProfile()">✏️ 编辑档案</button>
+        </div>
+        <div class="profile-card" id="profileEdit">
+            <h3>👶 宝宝档案</h3>
+            <div class="form-row">
+                <div class="form-group"><label>姓名 *</label><input type="text" id="pfName" placeholder="宝宝的名字"></div>
+                <div class="form-group"><label>昵称</label><input type="text" id="pfNick" placeholder="平时怎么叫ta"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>年龄</label><input type="number" id="pfAge" placeholder="岁" min="1" max="18"></div>
+                <div class="form-group"><label>性别</label><select id="pfGender"><option value="">请选择</option><option>男</option><option>女</option></select></div>
+            </div>
+            <div class="form-group"><label>诊断情况</label><input type="text" id="pfDiagnosis" placeholder="如：轻度自闭症/阿斯伯格/待评估等"></div>
+            <div class="form-group"><label>兴趣爱好</label><textarea id="pfInterests" placeholder="ta喜欢什么？画画、音乐、拼图、积木..."></textarea></div>
+            <div class="form-group"><label>敏感/触发点</label><textarea id="pfTriggers" placeholder="什么情况会让ta不舒服？大声、人多、被碰到..."></textarea></div>
+            <div class="form-group"><label>训练目标</label><textarea id="pfGoals" placeholder="希望ta在哪些方面进步？主动打招呼、表达需求..."></textarea></div>
+            <div class="form-group"><label>备注</label><textarea id="pfNotes" placeholder="其他重要的信息"></textarea></div>
+            <button class="btn-save" onclick="saveProfile()">💾 保存档案</button>
+        </div>
+    </div>
+
+    <!-- ====== 情绪日记页 ====== -->
+    <div class="page" id="page-emotionDiary">
+        <div class="emotion-log-form">
+            <h3 style="font-size:15px;margin-bottom:10px;">📝 记录情绪</h3>
+            <div class="form-row">
+                <div class="form-group"><label>日期时间</label><input type="datetime-local" id="emTime"></div>
+                <div class="form-group"><label>情绪类型</label><select id="emType">
+                    <option>😊 开心</option><option>😢 难过</option><option>😠 生气</option>
+                    <option>😨 害怕</option><option>😟 焦虑</option><option>😴 疲倦</option>
+                    <option>🤗 兴奋</option><option>😶 平静</option><option>🤔 其他</option>
+                </select></div>
+            </div>
+            <div class="form-row">
+                <div class="form-group"><label>强度 (1-5)</label><input type="range" id="emIntensity" min="1" max="5" value="3" style="width:100%;"></div>
+                <div class="form-group"><label>持续时长</label><select id="emDuration">
+                    <option>几分钟</option><option>半小时</option><option>1-2小时</option><option>半天</option><option>一整天</option>
+                </select></div>
+            </div>
+            <div class="form-group"><label>触发事件</label><input type="text" id="emTrigger" placeholder="发生了什么触发了这个情绪？"></div>
+            <div class="form-group"><label>应对方式</label><input type="text" id="emCoping" placeholder="ta是怎么应对的？你做了什么？"></div>
+            <div class="form-group"><label>备注</label><textarea id="emNotes" placeholder="其他观察..."></textarea></div>
+            <button class="btn-save" onclick="saveEmotionLog()" style="background:var(--pink);">💾 保存记录</button>
+        </div>
+        <h3 style="font-size:14px;margin-bottom:8px;">📊 情绪分布 (近30天)</h3>
+        <div class="emotion-stats" id="emotionStats"></div>
+        <h3 style="font-size:14px;margin:14px 0 8px;">📋 最近记录</h3>
+        <div class="emotion-list" id="emotionList"></div>
+    </div>
+
+    <!-- ====== 奖励商店页 ====== -->
+    <div class="page" id="page-rewardShop">
+        <div style="text-align:center;margin-bottom:14px;">
+            <span style="font-size:36px;">🪙</span>
+            <h2 style="font-size:20px;">金币余额：<b id="shopCoinBalance">0</b></h2>
+            <p style="font-size:12px;color:var(--muted);">完成训练获得金币，用金币兑换奖励</p>
+        </div>
+        <div class="add-reward-form">
+            <h4>➕ 添加自定义奖励</h4>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                <input type="text" id="rwName" placeholder="奖励名称" style="flex:1;min-width:120px;padding:7px 10px;border:1.5px solid var(--border);border-radius:8px;font-size:12px;">
+                <input type="text" id="rwIcon" placeholder="图标" style="width:60px;padding:7px;border:1.5px solid var(--border);border-radius:8px;font-size:12px;" value="🎁">
+                <input type="number" id="rwCost" placeholder="金币" style="width:70px;padding:7px;border:1.5px solid var(--border);border-radius:8px;font-size:12px;" min="1" value="10">
+                <button class="btn-save" onclick="addReward()" style="font-size:12px;padding:7px 14px;">添加</button>
+            </div>
+        </div>
+        <div class="reward-shop" id="rewardShopGrid"></div>
+    </div>
+
+</div>
+
+<!-- 总结/兑换模态框 -->
+<div class="modal-overlay" id="summaryModal">
+    <div class="modal" id="summaryContent"></div>
+</div>
+
+<script src="modules-data.js"></script>
+<script>
+// ============ 全局 ============
+let curPage='home', curModule=null, curItem=null, trainingActive=false, isSending=false;
+let speakerOn=false, voiceOn=false, recognition=null;
+const LS={profile:'sa_profile',emotions:'sa_emotions',rewards:'sa_rewards',coins:'sa_coins',redeemed:'sa_redeemed'};
+
+// ============ 初始化 ============
+document.addEventListener('DOMContentLoaded',()=>{
+    checkApi();
+    loadModules();
+    refreshAll();
+    // 默认时间
+    document.getElementById('emTime').value = new Date().toISOString().slice(0,16);
+    // 恢复上次页面
+    const lastPage = localStorage.getItem('sa_last_page');
+    if(lastPage) navTo(lastPage);
+});
+
+function checkApi(){
+    const key = localStorage.getItem('sa_deepseek_key');
+    if(key){document.getElementById('modeTag').textContent='🤖 AI';}
+}
+// 设置API Key（在设置页面或首次使用时）
+function setApiKey(key){localStorage.setItem('sa_deepseek_key',key);checkApi();}
+function getApiKey(){return localStorage.getItem('sa_deepseek_key')||'';}
+
+function refreshAll(){
+    loadStats();
+    loadProfile();
+    loadEmotionStats();
+    loadEmotionList();
+    loadRewardShop();
+    updateCoinDisplay();
+}
+
+// ============ 导航 ============
+function toggleSidebar(){
+    document.getElementById('sidebar').classList.toggle('collapsed');
+}
+
+function navTo(page, data){
+    curPage=page;
+    localStorage.setItem('sa_last_page', page);
+    // 更新导航激活状态
+    document.querySelectorAll('.nav-item').forEach(el=>el.classList.remove('active'));
+    const navItem = document.querySelector(`.nav-item[data-page="${page}"]`);
+    if(navItem) navItem.classList.add('active');
+
+    // 切换页面
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    const pageEl = document.getElementById('page-'+page);
+    if(pageEl) pageEl.classList.add('active');
+
+    // 更新标题
+    const titles={home:'🦏 动物世界',train:'🎮 训练中心',profile:'🦊 宝宝档案',emotionDiary:'🐰 情绪日记',rewardShop:'🌟 奖励商店'};
+    document.getElementById('pageTitle').innerHTML=titles[page]||'';
+
+    if(page==='train' && data){
+        curModule=data;
+        document.getElementById('trainSelectView').style.display='block';
+        document.getElementById('trainActiveView').style.display='none';
+        trainingActive=false;
+        const mod=window._modules.find(m=>m.id===curModule);
+        if(mod){
+            document.getElementById('trainModuleTitle').textContent=mod.name;
+            renderItems(mod);
+        }
+    }
+    if(page==='train' && !data){document.getElementById('trainSelectView').style.display='none';}
+    if(page==='home') renderHomeModules();
+    if(page==='profile') loadProfile();
+    if(page==='emotionDiary'){loadEmotionStats();loadEmotionList();}
+    if(page==='rewardShop'){loadRewardShop();updateCoinDisplay();}
+    if(page!=='train'){trainingActive=false;stopListening();}
+}
+
+document.querySelectorAll('.nav-item').forEach(el=>{
+    el.addEventListener('click',function(){
+        const page=this.dataset.page;
+        const mod=this.dataset.module;
+        const toggle=this.dataset.toggle;
+        if(toggle){
+            const sub=document.getElementById(toggle);
+            sub.classList.toggle('open');
+            return;
+        }
+        if(page==='train' && mod){navTo('train',mod);return;}
+        if(page) navTo(page);
+    });
+});
+
+// ============ 模块加载 ============
+function loadModules(){
+    // 独立运行版：使用嵌入数据，不再调用后端API
+    window._modules = Object.values(MODULES_DATA).map(m => ({
+        id: m.id, name: m.name, icon: m.icon, desc: m.desc,
+        color: m.color, type: m.type, items: m.items
+    }));
+    renderHomeModules();
+}
+
+function renderHomeModules(){
+    if(!window._modules)return;
+    const grid=document.getElementById('homeModules');
+    grid.innerHTML=window._modules.map(m=>`
+        <div class="mod-card" onclick="navTo('train','${m.id}')" style="border-color:${m.color};">
+            <span class="mod-icon">${m.icon}</span>
+            <div class="mod-name">${m.name}</div>
+            <div class="mod-count">${m.items.length}个训练项目</div>
+        </div>
+    `).join('');
+}
+
+function renderItems(mod){
+    const grid=document.getElementById('trainItemGrid');
+    curItem=null;
+    grid.innerHTML=mod.items.map(it=>`
+        <div class="item-card" data-item="${it.id}" onclick="pickItem('${it.id}',this)">
+            <div class="item-icon">${it.icon}</div>
+            <div class="item-name">${it.name}</div>
+        </div>
+    `).join('');
+    document.getElementById('btnStart').disabled=true;
+}
+
+function pickItem(id,el){
+    curItem=id;
+    document.querySelectorAll('#trainItemGrid .item-card').forEach(c=>c.classList.remove('chosen'));
+    el.classList.add('chosen');
+    document.getElementById('btnStart').disabled=false;
+}
+
+// ============ 训练流程 ============
+async function startTraining(){
+    if(!curModule||!curItem)return;
+    try{
+        const r=await fetch('/api/conversation/start',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({module_id:curModule,item_id:curItem})});
+        const d=await r.json();
+        document.getElementById('trainSelectView').style.display='none';
+        document.getElementById('trainActiveView').style.display='block';
+        const mod=window._modules.find(m=>m.id===d.module.id);
+        const color=mod?mod.color:'#5B8C5A';
+        document.getElementById('trainAvatar').style.background=color;
+        document.getElementById('trainAvatar').textContent=d.module.icon;
+        document.getElementById('trainTitle').textContent=d.item.name+' · '+d.character;
+        document.getElementById('trainSubtitle').textContent=d.module.name;
+        document.getElementById('trainScore').textContent='0';
+        document.getElementById('abaBar').style.display=d.module.type==='aba'?'flex':'none';
+        document.getElementById('chatArea').innerHTML='';
+        addMsg('ai',d.opening,d.module.icon,color);
+        trainingActive=true;
+        document.getElementById('msgInput').focus();
+    }catch(e){alert('开始失败');}
+}
+
+async function sendMessage(){
+    if(!trainingActive||isSending)return;
+    const input=document.getElementById('msgInput');const msg=input.value.trim();if(!msg)return;
+    isSending=true;document.getElementById('btnSend').disabled=true;input.value='';
+    addMsg('user',msg);const loadEl=addLoading();stopListening();
+    try{
+        const r=await fetch('/api/conversation/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:msg})});
+        const d=await r.json();loadEl.remove();
+        if(d.evaluation&&d.module_type!=='aba'){const tip=d.evaluation.tip||'';addEval(d.evaluation.feedback+(tip?' — '+tip:''));}
+        addMsg('ai',d.ai_response);
+        document.getElementById('trainScore').textContent=d.score;
+        if(d.module_type==='aba'&&d.evaluation&&d.evaluation.aba_stats)updateAba(d.evaluation.aba_stats);
+        if(d.new_badges&&d.new_badges.length>0){d.new_badges.forEach(b=>addBadge(b));refreshAll();}
+        if(speakerOn)speakText(d.ai_response);
+        scrollDown();
+    }catch(e){loadEl.remove();addMsg('ai','发送失败');}
+    finally{isSending=false;document.getElementById('btnSend').disabled=false;}
+}
+
+async function getHint(){
+    if(!trainingActive||isSending)return;
+    try{
+        const r=await fetch('/api/conversation/hint',{method:'POST'});
+        const d=await r.json();
+        addMsg('ai',d.hint,'💡','#E8833A');
+        if(d.new_badges&&d.new_badges.length>0){d.new_badges.forEach(b=>addBadge(b));refreshAll();}
+        scrollDown();
+    }catch(e){}
+}
+
+async function endTraining(){
+    if(!trainingActive)return;
+    try{
+        const r=await fetch('/api/conversation/end',{method:'POST'});
+        const d=await r.json();
+        trainingActive=false;stopListening();
+        // 计算金币奖励
+        const coinsEarned=Math.max(1,Math.floor(d.total_score/10));
+        const badgeBonus=d.new_badges.length*5;
+        const totalCoins=coinsEarned+badgeBonus;
+        addCoins(totalCoins);
+
+        const newNames=d.new_badges.map(b=>b.name);
+        let abaHTML='';
+        if(d.aba_stats){
+            abaHTML=`<div style="font-size:12px;font-weight:600;margin:8px 0;">📋 ABA数据：正确${d.aba_stats.correct}/${d.aba_stats.total}（${d.aba_stats.rate}%）独立${d.aba_stats.independent}次</div>`;
+        }
+        let badgeHTML='';
+        if(d.all_badges&&d.all_badges.length>0){
+            badgeHTML=`<div class="badges-row">${d.all_badges.map(b=>`<span class="badge-tag ${newNames.includes(b.name)?'new-badge':''}">${b.icon}${b.name}${newNames.includes(b.name)?'🆕':''}</span>`).join('')}</div>`;
+        }
+
+        document.getElementById('summaryContent').innerHTML=`
+            <div class="sum-icon">${d.module_icon}</div>
+            <h2>${d.item_name} · 训练完成</h2>
+            <p style="color:var(--muted);font-size:13px;margin:6px 0;">${d.message}</p>
+            <div class="stats-row">
+                <div class="stat-item"><div class="val">${d.total_score}</div><div class="lbl">积分</div></div>
+                <div class="stat-item"><div class="val">${d.message_count}</div><div class="lbl">轮次</div></div>
+                <div class="stat-item"><div class="val">${d.avg_rating}</div><div class="lbl">评分</div></div>
+            </div>
+            ${abaHTML}
+            <div style="background:var(--gold-light);border-radius:14px;padding:10px;margin:10px 0;text-align:center;">
+                <span style="font-size:24px;">🪙</span>
+                <div style="font-weight:700;color:#8B6914;">获得 <b style="font-size:20px;">${totalCoins}</b> 金币！</div>
+                <div style="font-size:10px;color:#8B6914;">训练得分 ${coinsEarned} + 徽章奖励 ${badgeBonus}</div>
+            </div>
+            ${badgeHTML}
+            <button class="btn-restart" onclick="closeSummary()">🔄 继续训练</button>
+        `;
+        document.getElementById('summaryModal').classList.add('open');
+        refreshAll();
+    }catch(e){console.error(e);}
+}
+
+function closeSummary(){
+    document.getElementById('summaryModal').classList.remove('open');
+    navTo('train',curModule);
+}
+
+function updateAba(s){
+    document.getElementById('abaBar').innerHTML=`
+        <span class="aba-stat" style="color:var(--green);">✅ ${s.correct_count}</span>
+        <span class="aba-stat">📊 ${s.total_trials}轮</span>
+        <span class="aba-stat" style="color:${s.rate>=80?'var(--green)':'var(--orange)'};">正确率${s.rate}%</span>
+        <span class="aba-stat">🔥 ${s.streak}连</span>
+    `;
+}
+
+// ============ 宝宝档案 ============
+function saveProfile(){
+    const data={
+        name:document.getElementById('pfName').value.trim(),
+        nick:document.getElementById('pfNick').value.trim(),
+        age:document.getElementById('pfAge').value,
+        gender:document.getElementById('pfGender').value,
+        diagnosis:document.getElementById('pfDiagnosis').value.trim(),
+        interests:document.getElementById('pfInterests').value.trim(),
+        triggers:document.getElementById('pfTriggers').value.trim(),
+        goals:document.getElementById('pfGoals').value.trim(),
+        notes:document.getElementById('pfNotes').value.trim(),
+        updatedAt:new Date().toISOString()
+    };
+    localStorage.setItem(LS.profile,JSON.stringify(data));
+    loadProfile();
+}
+
+function loadProfile(){
+    const raw=localStorage.getItem(LS.profile);
+    if(!raw){document.getElementById('profileEdit').style.display='block';document.getElementById('profileView').style.display='none';return;}
+    const d=JSON.parse(raw);
+    document.getElementById('profileEdit').style.display='none';
+    document.getElementById('profileView').style.display='block';
+    document.getElementById('profileDisplay').innerHTML=`
+        <div><b>姓名：</b>${d.name||'—'}</div>
+        <div><b>昵称：</b>${d.nick||'—'}</div>
+        <div><b>年龄：</b>${d.age||'—'} 岁 | <b>性别：</b>${d.gender||'—'}</div>
+        <div><b>诊断：</b>${d.diagnosis||'—'}</div>
+        <div><b>兴趣：</b>${d.interests||'—'}</div>
+        <div><b>触发点：</b>${d.triggers||'—'}</div>
+        <div><b>目标：</b>${d.goals||'—'}</div>
+        <div><b>备注：</b>${d.notes||'—'}</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:6px;">最后更新：${new Date(d.updatedAt).toLocaleString()}</div>
+    `;
+    document.getElementById('sidebarBabyName').textContent=d.nick||d.name||'未设置';
+    // 首页欢迎语
+    const name=d.nick||d.name||'';
+    document.getElementById('homeGreeting').textContent=name?`${name}，欢迎回来！`:'欢迎来到星宝训练营';
+    // 首页犀牛吉祥物已用SVG内嵌，无需动态更新
+}
+
+function editProfile(){
+    const raw=localStorage.getItem(LS.profile);
+    if(raw){
+        const d=JSON.parse(raw);
+        document.getElementById('pfName').value=d.name||'';
+        document.getElementById('pfNick').value=d.nick||'';
+        document.getElementById('pfAge').value=d.age||'';
+        document.getElementById('pfGender').value=d.gender||'';
+        document.getElementById('pfDiagnosis').value=d.diagnosis||'';
+        document.getElementById('pfInterests').value=d.interests||'';
+        document.getElementById('pfTriggers').value=d.triggers||'';
+        document.getElementById('pfGoals').value=d.goals||'';
+        document.getElementById('pfNotes').value=d.notes||'';
+    }
+    document.getElementById('profileEdit').style.display='block';
+    document.getElementById('profileView').style.display='none';
+}
+
+// ============ 情绪日记 ============
+function saveEmotionLog(){
+    const entry={
+        id:Date.now(),
+        time:document.getElementById('emTime').value,
+        type:document.getElementById('emType').value,
+        intensity:parseInt(document.getElementById('emIntensity').value),
+        duration:document.getElementById('emDuration').value,
+        trigger:document.getElementById('emTrigger').value.trim(),
+        coping:document.getElementById('emCoping').value.trim(),
+        notes:document.getElementById('emNotes').value.trim(),
+    };
+    const logs=JSON.parse(localStorage.getItem(LS.emotions)||'[]');
+    logs.unshift(entry);
+    // 只保留90天
+    const cutoff=Date.now()-90*86400000;
+    const filtered=logs.filter(l=>l.id>cutoff);
+    localStorage.setItem(LS.emotions,JSON.stringify(filtered));
+    loadEmotionStats();loadEmotionList();
+    // 清空表单
+    ['emTrigger','emCoping','emNotes'].forEach(id=>document.getElementById(id).value='');
+    document.getElementById('emTime').value=new Date().toISOString().slice(0,16);
+}
+
+function loadEmotionStats(){
+    const logs=JSON.parse(localStorage.getItem(LS.emotions)||'[]');
+    const cutoff=Date.now()-30*86400000;
+    const recent=logs.filter(l=>l.id>cutoff);
+    const counts={};
+    recent.forEach(l=>{const key=l.type.split(' ')[1]||l.type;counts[key]=1+(counts[key]||0);});
+    const total=recent.length||1;
+    const colors={'开心':'#5B8C5A','难过':'#4A90D9','生气':'#D94040','害怕':'#7B68EE','焦虑':'#E8833A','疲倦':'#999','兴奋':'#F0A500','平静':'#6C5B7B','其他':'#aaa'};
+    const html=Object.entries(counts).sort((a,b)=>b[1]-a[1]).map(([k,v])=>{
+        const pct=Math.round(v/total*100);
+        return `<div class="emotion-chart-bar"><span>${k}</span><div class="bar" style="width:${Math.max(pct*3,20)}px;background:${colors[k]||'#ccc'};"></div><span style="font-size:10px;">${v}次(${pct}%)</span></div>`;
+    }).join('');
+    document.getElementById('emotionStats').innerHTML=html||'<span style="font-size:12px;color:var(--muted);">暂无数据</span>';
+}
+
+function loadEmotionList(){
+    const logs=JSON.parse(localStorage.getItem(LS.emotions)||'[]');
+    const html=logs.slice(0,20).map(l=>`
+        <div class="entry">
+            <div class="entry-emoji">${l.type.split(' ')[0]}</div>
+            <div class="entry-info">
+                <div><b>${l.type}</b> ${'●'.repeat(l.intensity)}${'○'.repeat(5-l.intensity)}</div>
+                <div>${l.trigger||'未记录触发事件'} | 持续${l.duration}</div>
+                ${l.coping?`<div>应对：${l.coping}</div>`:''}
+                <div class="entry-time">${l.time?new Date(l.time).toLocaleString():''}</div>
+            </div>
+        </div>
+    `).join('');
+    document.getElementById('emotionList').innerHTML=html||'<p style="color:var(--muted);font-size:12px;">还没有记录</p>';
+}
+
+// ============ 奖励系统 ============
+function getCoins(){return parseInt(localStorage.getItem(LS.coins)||'0');}
+function addCoins(n){localStorage.setItem(LS.coins,String(getCoins()+n));updateCoinDisplay();}
+function spendCoins(n){const c=getCoins();if(c<n)return false;localStorage.setItem(LS.coins,String(c-n));updateCoinDisplay();return true;}
+
+function updateCoinDisplay(){
+    const c=getCoins();
+    document.getElementById('topCoins').textContent=c;
+    document.getElementById('coinNav').textContent='🪙'+c;
+    document.getElementById('shopCoinBalance').textContent=c;
+}
+
+function getDefaultRewards(){
+    return [
+        {id:'r1',name:'看一集动画片',icon:'📺',cost:20},
+        {id:'r2',name:'吃一颗糖',icon:'🍬',cost:10},
+        {id:'r3',name:'多玩15分钟',icon:'⏰',cost:30},
+        {id:'r4',name:'去公园玩',icon:'🌳',cost:50},
+        {id:'r5',name:'买个新玩具',icon:'🧸',cost:100},
+        {id:'r6',name:'吃冰淇淋',icon:'🍦',cost:25},
+    ];
+}
+
+function loadRewardShop(){
+    const saved=JSON.parse(localStorage.getItem(LS.rewards)||'null');
+    const rewards=saved||getDefaultRewards();
+    if(!saved) localStorage.setItem(LS.rewards,JSON.stringify(rewards));
+    const redeemed=JSON.parse(localStorage.getItem(LS.redeemed)||'[]');
+    const grid=document.getElementById('rewardShopGrid');
+    grid.innerHTML=rewards.map(r=>{
+        const remaining=redeemed.filter(x=>x.id===r.id).length;
+        return `
+        <div class="reward-item">
+            <div class="reward-icon">${r.icon}</div>
+            <div class="reward-name">${r.name}</div>
+            <div class="reward-cost">🪙 ${r.cost} 金币</div>
+            ${remaining>0?`<div style="font-size:10px;color:var(--muted);">已兑换${remaining}次</div>`:''}
+            <button class="btn-redeem" onclick="redeemReward('${r.id}')">兑换</button>
+        </div>`;
+    }).join('');
+}
+
+function addReward(){
+    const name=document.getElementById('rwName').value.trim();
+    const icon=document.getElementById('rwIcon').value.trim()||'🎁';
+    const cost=parseInt(document.getElementById('rwCost').value)||10;
+    if(!name)return;
+    const rewards=JSON.parse(localStorage.getItem(LS.rewards)||'[]');
+    rewards.push({id:'r'+Date.now(),name,icon,cost:Math.max(1,cost)});
+    localStorage.setItem(LS.rewards,JSON.stringify(rewards));
+    document.getElementById('rwName').value='';
+    loadRewardShop();
+}
+
+function redeemReward(id){
+    const rewards=JSON.parse(localStorage.getItem(LS.rewards)||'[]');
+    const r=rewards.find(x=>x.id===id);
+    if(!r)return;
+    if(!confirm(`确定要用 ${r.cost} 金币兑换「${r.name}」吗？`))return;
+    if(!spendCoins(r.cost)){alert('金币不够哦！继续训练赚金币吧~');return;}
+    const redeemed=JSON.parse(localStorage.getItem(LS.redeemed)||'[]');
+    redeemed.push({id,time:Date.now()});
+    localStorage.setItem(LS.redeemed,JSON.stringify(redeemed));
+    alert(`🎉 兑换成功！享受你的「${r.name}」吧！`);
+    loadRewardShop();
+}
+
+// ============ 语音 ============
+function toggleVoice(){
+    if(voiceOn){stopListening();return;}
+    const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+    if(!SR){alert('请用Chrome或Edge浏览器');return;}
+    recognition=new SR();recognition.lang='zh-CN';recognition.interimResults=false;recognition.continuous=false;
+    recognition.onstart=()=>{voiceOn=true;document.getElementById('btnMic').classList.add('recording');};
+    recognition.onresult=e=>{document.getElementById('msgInput').value=e.results[0][0].transcript;stopListening();setTimeout(()=>sendMessage(),300);};
+    recognition.onerror=()=>stopListening();recognition.onend=()=>stopListening();
+    recognition.start();
+}
+function stopListening(){
+    voiceOn=false;document.getElementById('btnMic').classList.remove('recording');
+    if(recognition){try{recognition.stop();}catch(e){};recognition=null;}
+}
+function toggleSpeaker(){
+    speakerOn=!speakerOn;document.getElementById('btnSpeaker').classList.toggle('on',speakerOn);
+    if(!speakerOn)speechSynthesis.cancel();
+}
+function speakText(t){
+    if(!speakerOn||!t)return;speechSynthesis.cancel();
+    const clean=t.replace(/[💡🎤🔊▶️⬅️📋🏆🌟👍💪🌱❶❷❸❹❺]/g,'').replace(/\n+/g,'，').trim();
+    if(!clean)return;
+    const u=new SpeechSynthesisUtterance(clean);u.lang='zh-CN';u.rate=0.95;speechSynthesis.speak(u);
+}
+
+// ============ UI ============
+function addMsg(role,content,icon,color){
+    const area=document.getElementById('chatArea');
+    const d=document.createElement('div');d.className=`msg ${role}`;
+    const av=role==='ai'?(icon||'🤖'):'😊';
+    const bg=role==='ai'?(color||'#e0e0e0'):'#e8f4e8';
+    d.innerHTML=`<div class="msg-avatar" style="background:${bg};color:${role==='ai'?'#fff':'#5B8C5A'};">${av}</div><div class="bubble">${esc(content)}</div>`;
+    area.appendChild(d);
+}
+function addLoading(){
+    const area=document.getElementById('chatArea');
+    const d=document.createElement('div');d.className='msg ai';d.id='loadingEl';
+    d.innerHTML='<div class="msg-avatar" style="background:#e0e0e0;">🤖</div><div class="bubble" style="color:var(--muted);">正在输入...</div>';
+    area.appendChild(d);scrollDown();return d;
+}
+function addEval(t){const d=document.createElement('div');d.className='eval-toast';d.textContent='✨ '+t;document.getElementById('chatArea').appendChild(d);}
+function addBadge(b){const d=document.createElement('div');d.className='badge-toast';d.textContent='🏆 '+b.icon+' '+b.name;document.getElementById('chatArea').appendChild(d);}
+function scrollDown(){setTimeout(()=>{const a=document.getElementById('chatArea');a.scrollTop=a.scrollHeight;},50);}
+function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+
+async function loadStats(){
+    try{const r=await fetch('/api/user/stats');const d=await r.json();
+        document.getElementById('topSessions').textContent=d.total_sessions;
+        document.getElementById('topBadges').textContent=d.badges.length;
+    }catch(e){}
+}
+</script>
+<!-- 移动端底部导航栏 -->
+<nav class="mobile-nav" id="mobileNav">
+    <div class="mnav-item active" data-page="home" onclick="navTo('home')">
+        <span class="mnav-icon">🦏</span>首页
+    </div>
+    <div class="mnav-item" data-page="train" onclick="navTo('train')">
+        <span class="mnav-icon">🎮</span>训练
+    </div>
+    <div class="mnav-item" data-page="profile" onclick="navTo('profile')">
+        <span class="mnav-icon">🦊</span>档案
+    </div>
+    <div class="mnav-item" data-page="emotionDiary" onclick="navTo('emotionDiary')">
+        <span class="mnav-icon">🐰</span>情绪
+    </div>
+    <div class="mnav-item" data-page="rewardShop" onclick="navTo('rewardShop')">
+        <span class="mnav-icon">🌟</span>奖励
+    </div>
+</nav>
+
+<!-- PWA安装提示 -->
+<div class="install-banner" id="installBanner">
+    <span>📲 安装星宝训练营到手机桌面</span>
+    <button class="btn-install" id="btnInstall" onclick="installApp()">一键安装</button>
+    <button class="btn-close" onclick="dismissInstall()">✕</button>
+</div>
+
+<script>
+// ============ PWA安装 ============
+let deferredPrompt;
+window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    deferredPrompt = e;
+    if (!localStorage.getItem('sa_install_dismissed')) {
+        document.getElementById('installBanner').classList.add('show');
+    }
+});
+function installApp(){
+    if (!deferredPrompt) { alert('请用浏览器菜单中的"添加到主屏幕"'); return; }
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(() => { deferredPrompt = null;
+        document.getElementById('installBanner').classList.remove('show'); });
+}
+function dismissInstall(){
+    document.getElementById('installBanner').classList.remove('show');
+    localStorage.setItem('sa_install_dismissed', '1');
+}
+// 更新移动端底部导航激活状态
+const origNavTo = navTo;
+navTo = function(page, data) {
+    origNavTo(page, data);
+    document.querySelectorAll('.mnav-item').forEach(el => el.classList.remove('active'));
+    const mItem = document.querySelector(`.mnav-item[data-page="${page}"]`);
+    if (mItem) mItem.classList.add('active');
+};
+// 注册Service Worker
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/static/sw.js').catch(() => {});
+}
+</script>
+<script src="standalone.js"></script>
+</body>
+</html>
