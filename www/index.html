@@ -10,8 +10,8 @@
 <meta name="apple-mobile-web-app-title" content="星宝训练营">
 <meta name="theme-color" content="#4A9C5C">
 <meta name="description" content="为星宝提供社交、日常、表达、ABA、情绪、睡眠六大训练">
-<link rel="manifest" href="/static/manifest.json">
-<link rel="apple-touch-icon" href="/static/icon-192.png">
+<link rel="manifest" href="static/manifest.json">
+<link rel="apple-touch-icon" href="static/icon-192.png">
 <!-- 移动端底部安全区 -->
 <meta name="mobile-web-app-capable" content="yes">
 <style>
@@ -308,6 +308,37 @@ a{color:inherit;text-decoration:none;}
 </style>
 </head>
 <body>
+
+<!-- 错误提示层 -->
+<div id="errorOverlay" style="display:none;position:fixed;inset:0;z-index:9999;background:#1a3a2a;color:#fff;padding:40px 20px;overflow:auto;font-size:14px;font-family:monospace;">
+    <h2 style="color:#F5A623;">🦏 星宝训练营</h2>
+    <p style="color:#8BC34A;">App正在加载中...如果持续显示此页面，请查看下方错误信息：</p>
+    <pre id="errorLog" style="background:#111;padding:12px;border-radius:8px;margin-top:16px;white-space:pre-wrap;font-size:12px;color:#f88;"></pre>
+</div>
+<script>
+// 全局错误捕获
+window.onerror = function(msg, url, line, col, err) {
+    var ov = document.getElementById('errorOverlay');
+    var log = document.getElementById('errorLog');
+    if (ov && log) {
+        ov.style.display = 'block';
+        log.textContent += 'ERROR: ' + msg + '\n  at line ' + line + ':' + col + '\n\n';
+    }
+    return false;
+};
+// 显示加载状态
+document.addEventListener('DOMContentLoaded', function() {
+    var ov = document.getElementById('errorOverlay');
+    if (ov) {
+        setTimeout(function() {
+            if (ov.style.display === 'block') return;
+            // Page loaded successfully, hide error overlay
+            ov.style.display = 'none';
+        }, 2000);
+    }
+});
+console.log('🦏 App starting...');
+</script>
 
 <!-- ====== 森林动物世界背景 ====== -->
 <div style="position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;">
@@ -1650,7 +1681,7 @@ console.log('   AI模式：配置API Key后启用');
 
 // 注册Service Worker
 if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/static/sw.js').catch(() => {});
+    navigator.serviceWorker.register('static/sw.js').catch(() => {});
 }
 </script>
 
