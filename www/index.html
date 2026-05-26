@@ -730,8 +730,11 @@ a{color:inherit;text-decoration:none;}
     <div class="modal" id="summaryContent"></div>
 </div>
 
-<script src="modules-data.js"></script>
+
 <script>
+// 星宝训练营 - 模块数据（独立运行版）
+const MODULES_DATA = {"social": {"id": "social", "name": "社交对话训练", "icon": "🦊", "color": "#4A9C5C", "type": "chat", "desc": "在森林中与动物朋友们练习日常社交对话", "items": [{"id": "travel", "name": "旅行", "icon": "🦊", "character": "小狐", "desc": "一只爱旅行的小狐狸", "scene": "你在森林小径上遇到了一只背着行囊的小狐狸...", "opening": "嘿！你也喜欢旅行吗？我刚从彩虹瀑布回来，那里的水花闪闪发光太美了。你去过哪些好玩的地方呀？"}, {"id": "books", "name": "书籍", "icon": "🐿️", "character": "小松", "desc": "一只爱看书的小松鼠", "scene": "在森林图书馆的大树下，一只小松鼠正抱着一本书看得入迷...", "opening": "我看到你也在看书～最近有什么好看的书推荐吗？我刚看完一本关于星星的绘本。"}, {"id": "sports", "name": "运动", "icon": "🐒", "character": "小猴", "desc": "一只活泼好动的小猴子", "scene": "在森林运动场上，一只小猴子刚踢完果子球...", "opening": "今天天气真好，我刚踢完一场果子球！你也喜欢运动吗？"}, {"id": "music", "name": "音乐", "icon": "🐦", "character": "小莺", "desc": "一只爱唱歌的小黄莺", "scene": "在森林音乐角的树枝上，一只小黄莺正哼着歌...", "opening": "啾啾～我正在哼一首新学的歌。你喜欢听什么类型的音乐呀？"}, {"id": "movies", "name": "电影", "icon": "🦁", "character": "小狮", "desc": "一只喜欢看动画片的小狮子", "scene": "在森林影院门口，电影刚散场，一只小狮子还沉浸在剧情中...", "opening": "刚才那部动画片你觉得怎么样？我特别喜欢那个结局。"}, {"id": "games", "name": "游戏", "icon": "🐼", "character": "小胖", "desc": "一只爱玩游戏的小熊猫", "scene": "在森林游戏角的竹林边，一只小熊猫正在玩拼图...", "opening": "你也在玩游戏吗？我最近在玩一个特别有趣的拼图游戏。"}]}, "daily_life": {"id": "daily_life", "name": "日常生活训练", "icon": "🐻", "color": "#5BA4D6", "type": "chat", "desc": "在动物小镇练习生活中常见场景的实用对话", "items": [{"id": "ordering", "name": "餐厅点餐", "icon": "🍯", "character": "熊大厨", "desc": "熊熊餐厅的大厨", "scene": "你走进森林里飘着香味的熊熊餐厅...", "opening": "欢迎光临熊熊餐厅！今天有新鲜的蜂蜜松饼和蘑菇汤。你想吃点什么呀？"}, {"id": "shopping", "name": "超市购物", "icon": "🛒", "character": "小浣", "desc": "森林超市的店员小浣熊", "scene": "你在森林超市里找东西，店员小浣熊看到你...", "opening": "嗨！需要帮忙找什么东西吗？我们超市新到了一批松果饼干！"}, {"id": "directions", "name": "问路指引", "icon": "🗺️", "character": "长颈鹿大叔", "desc": "热心的长颈鹿，个子高看得远", "scene": "你在森林岔路口看着地图有点迷茫...", "opening": "小朋友，我看你好像迷路了？别担心，我对这片森林可熟了。"}, {"id": "doctor", "name": "看医生", "icon": "🏥", "character": "大象医生", "desc": "森林诊所温柔耐心的大象医生", "scene": "你坐在森林诊所里，大象医生正用长鼻子轻轻翻看病历...", "opening": "你好，我是大象医生。今天哪里不舒服呀？慢慢说，不着急。"}, {"id": "phone_call", "name": "接打电话", "icon": "📞", "character": "小白", "desc": "你的好朋友小白兔", "scene": "你的树洞电话响了，是好朋友小白兔打来的...", "opening": "喂？是我呀小白！周末森林里要举办蘑菇节，想问问你要不要一起去？"}, {"id": "appointment", "name": "预约服务", "icon": "📅", "character": "狐狸小姐", "desc": "森林社区中心的前台狐狸小姐", "scene": "你来到森林社区中心的服务台前...", "opening": "你好呀！欢迎来到森林社区中心。想预约什么活动呢？"}]}, "expression": {"id": "expression", "name": "口语表达训练", "icon": "🦜", "color": "#F5A623", "type": "expression", "desc": "跟着聪明的鹦鹉老师练习描述、讲述、表达", "items": [{"id": "describe", "name": "描述练习", "icon": "🦜", "desc": "鹦鹉老师带你仔细观察", "instruction": "嗨！我是鹦鹉老师小鹦。现在请你看看周围，选一样东西，尽可能详细地描述给我听。"}, {"id": "storytelling", "name": "故事讲述", "icon": "🐢", "desc": "老乌龟爷爷陪你编故事", "instruction": "小朋友好，我是龟爷爷。我给你开个头，你接着发挥想象力往下编。"}, {"id": "feelings", "name": "情绪表达", "icon": "🐶", "desc": "和小狗小汪一起认识感受", "instruction": "汪汪！我是小汪，我的心情都写在尾巴上。你今天的心情怎么样？"}, {"id": "retell", "name": "复述练习", "icon": "🐵", "desc": "小猴子小灵记性特别好", "instruction": "吱吱！我是小灵猴。我来说一段话，你仔细听，然后用你自己的话再说一遍。"}]}, "aba": {"id": "aba", "name": "ABA结构化训练", "icon": "🐘", "color": "#8B6BAE", "type": "aba", "desc": "大象老师带你做回合式训练，一步一步学本领", "items": [{"id": "greeting", "name": "打招呼", "icon": "👋", "sd": "在森林小路遇到认识的小伙伴，你该怎么说？", "target": "主动说出问候语", "examples": ["你好！", "嗨！", "早上好！"], "category": "森林礼仪"}, {"id": "thanking", "name": "说谢谢", "icon": "🙏", "sd": "小松鼠帮你捡起了掉在地上的松果，你该怎么说？", "target": "说出感谢的话", "examples": ["谢谢！", "谢谢你！"], "category": "森林礼仪"}, {"id": "asking_help", "name": "请求帮助", "icon": "🆘", "sd": "你在做手工时不会用剪刀，想请大象老师帮忙，你应该怎么说？", "target": "有礼貌地请求帮助", "examples": ["老师，这个我不太会，能教我吗？"], "category": "森林沟通"}, {"id": "waiting", "name": "等待轮流", "icon": "⏳", "sd": "你和小朋友都想荡秋千，但是他正在荡。你应该怎么做？", "target": "表达愿意等待", "examples": ["你先荡，我等一会儿。"], "category": "森林规则"}, {"id": "identify_feeling", "name": "识别情绪", "icon": "😀", "sd": "小兔子收到了它期待很久的胡萝卜蛋糕。它现在是什么心情？", "target": "识别并说出情绪", "examples": ["它好开心！"], "category": "情绪认知"}, {"id": "saying_no", "name": "礼貌拒绝", "icon": "🙅", "sd": "小猴邀请你去摘香蕉，但你的作业还没写完。你应该怎么说？", "target": "礼貌地拒绝并说明原因", "examples": ["对不起，我作业还没写完，下次再去吧。"], "category": "森林沟通"}]}, "emotion": {"id": "emotion", "name": "安抚情绪训练", "icon": "🐰", "color": "#E8927C", "type": "emotion", "desc": "兔兔安抚员陪你识别和调节情绪", "items": [{"id": "identify_emotion", "name": "情绪识别", "icon": "🔍", "desc": "和兔兔一起探索心里的小情绪", "instruction": "你好呀，我是兔兔小暖。你现在心里住着哪只小动物呀？慢慢说，不着急。"}, {"id": "deep_breathing", "name": "深呼吸练习", "icon": "🌬️", "desc": "像吹蒲公英一样轻轻呼吸", "instruction": "来，我们像吹蒲公英一样呼吸。深深吸一口气——闻到了花香吗？"}, {"id": "grounding", "name": "五感接地", "icon": "🤚", "desc": "像小树扎根一样回到当下", "instruction": "我们来玩\"五感游戏\"。看看周围——告诉我你看到的5样东西。"}, {"id": "positive_self_talk", "name": "积极自我对话", "icon": "💬", "desc": "用甜甜的话浇灌心里的小苗", "instruction": "试试对自己说一句温暖的话吧。比如\"我已经很棒了\"。"}, {"id": "safe_place", "name": "安全空间想象", "icon": "🏖️", "desc": "在心里建一个只属于你的秘密树洞", "instruction": "来，闭上眼睛想象一下——森林深处有一个只属于你的秘密树洞..."}, {"id": "progressive_relax", "name": "渐进式放松", "icon": "🧘", "desc": "像小猫伸懒腰一样逐一放松", "instruction": "我们像小猫一样来放松身体吧！首先蜷起脚趾...然后松开～"}]}, "sleep": {"id": "sleep", "name": "睡眠提升训练", "icon": "🦉", "color": "#5B7A9A", "type": "sleep", "desc": "猫头鹰眠眠带你慢慢进入甜甜的梦乡", "items": [{"id": "bedtime_routine", "name": "睡前准备", "icon": "🛁", "desc": "像小熊准备冬眠一样建立睡前仪式", "instruction": "咕～我是猫头鹰眠眠。在睡觉之前，你今晚睡前打算做什么呢？"}, {"id": "breath_sleep", "name": "呼吸助眠", "icon": "😮‍💨", "desc": "4-7-8月光呼吸法", "instruction": "来，我们试试月光呼吸法。吸气...1...2...3...4..."}, {"id": "body_scan", "name": "身体扫描", "icon": "🦶", "desc": "像月光慢慢扫过身体每个角落", "instruction": "躺在软软的被窝里，我们来让月光扫过全身。先从你的小脚趾开始..."}, {"id": "sleep_visualization", "name": "睡眠想象", "icon": "✨", "desc": "想象躺在软软的云朵上", "instruction": "闭上眼睛...想象你躺在一朵蒲公英上，轻轻飘起来了..."}, {"id": "sleep_hygiene", "name": "睡眠卫生", "icon": "📋", "desc": "了解森林动物们的睡眠好习惯", "instruction": "咕～你知道吗？森林里的动物们都有自己的睡眠秘诀。你平时睡眠习惯怎么样？"}, {"id": "calming_story", "name": "放松故事", "icon": "📖", "desc": "听猫头鹰眠眠讲温柔的晚安故事", "instruction": "准备好了吗？故事要开始了...月光洒在森林里，所有的小动物都准备睡觉了..."}]}};
+
 // ============ 全局 ============
 let curPage='home', curModule=null, curItem=null, trainingActive=false, isSending=false;
 let speakerOn=false, voiceOn=false, recognition=null;
@@ -1264,11 +1267,392 @@ navTo = function(page, data) {
     const mItem = document.querySelector(`.mnav-item[data-page="${page}"]`);
     if (mItem) mItem.classList.add('active');
 };
+// ============================================
+// 星宝训练营 - 独立运行模块
+// 替换所有Flask API调用，支持离线运行
+// ============================================
+
+// ===== 对话状态管理 =====
+let _conv = null; // 当前对话状态
+
+function _newConv(modId, itemId) {
+    const mod = MODULES_DATA[modId];
+    const item = mod.items.find(i => i.id === itemId);
+    return {
+        module_id: modId, item_id: itemId, module_type: mod.type,
+        messages: [], message_count: 0, score: 0, evaluations: [],
+        hints_used: 0, started_at: new Date().toISOString(),
+        aba_trials: [], aba_correct: 0, aba_total: 0,
+        aba_streak: 0, aba_independent_count: 0
+    };
+}
+
+// ===== 演示模式AI回复 =====
+const _DEMO = {
+    social: ['听起来真有意思！我自己也有类似的经历呢。你还有其他的兴趣吗？','嗯嗯，我理解你说的～那是什么让你对这个感兴趣的呀？','哈哈确实！跟你聊天很开心，你还有什么想分享的吗？','哇！这个角度我还没想过诶～能再多说一点吗？'],
+    daily_life: ['好的，没问题！请问还有什么需要帮您的吗？','明白了，您稍等一下。这样就可以了，还需要什么吗？','好的，已经帮您处理好了。祝您愉快！','没问题！还有其他需要吗？'],
+    expression: ['你说得很好！继续发挥你的观察力～','不错！你的表达能力在进步呢。再来试试？','很棒！你说得越来越清楚了。','真厉害！你的进步我都看在眼里～'],
+    emotion: ['谢谢你愿意和我分享这些...我听到了，你说的这些感受都很真实。','我理解那种感觉...你已经做得很好了——注意到了自己的感受，这就是很重要的一步。','没关系，慢慢来。每一种情绪都是可以被接纳的。','你的觉察力在成长呢...我们花一点时间，一起呼吸几次好吗？'],
+    sleep: ['嗯...让自己再沉下去一点点...每一次呼吸，都带走一些白天的重量...','做得很好...就这样...不用急着去任何地方，此刻，你只需要安静地呼吸...','夜色很温柔...你值得这样的休息...','每呼出一口气，身体就更放松一点点...很自然...']
+};
+function _demoReply(modId) {
+    const replies = _DEMO[modId] || _DEMO.social;
+    return replies[Math.floor(Math.random() * replies.length)];
+}
+function _demoEval() {
+    return {
+        score: Math.floor(Math.random() * 4) + 6,
+        feedback: ['很好的回应！','做得不错！','表达得很清楚！','继续保持！','越来越棒了！'][Math.floor(Math.random()*5)],
+        tip: ['可以多分享自己的想法','下次问问对方的看法','试着展开多说一点','注意回应对方哦'][Math.floor(Math.random()*4)]
+    };
+}
+
+// ===== ABA评估 =====
+function _evalAba(program, userMsg) {
+    const msg = userMsg.trim();
+    const examples = program.examples || [];
+    let correct = 'partial', score = 10;
+    // 简单匹配
+    for (const ex of examples) {
+        if (msg.includes(ex.replace(/[！!，,。.]/g, '').substring(0, 3))) {
+            correct = 'yes'; score = 20; break;
+        }
+    }
+    if (msg.length < 2) { correct = 'no'; score = 5; }
+    return {
+        correct, prompt_level: correct === 'yes' ? 0 : 1,
+        feedback: correct === 'yes' ? '太棒了！你说得完全正确！' : correct === 'partial' ? '接近了！再试试看？' : '没关系，跟我一起说一遍吧～',
+        aba_stats: null // filled in sendMessage
+    };
+}
+
+// ===== 徽章检查 =====
+function _checkBadges(conv) {
+    const earned = [];
+    const completed = JSON.parse(localStorage.getItem('sa_completed') || '[]');
+    const allB = JSON.parse(localStorage.getItem('sa_badges') || '[]');
+
+    const addB = (id) => { if (!allB.includes(id)) { allB.push(id); earned.push(id); } };
+
+    if (conv.message_count >= 1) addB('first_chat');
+    if (conv.hints_used > 0) addB('use_hint');
+    if (conv.message_count >= 10) addB('ten_messages');
+    if (conv.score >= 80) addB('high_score');
+    if (conv.aba_streak >= 5) addB('aba_perfect');
+    if (conv.aba_independent_count >= 10) addB('aba_independent');
+
+    const key = conv.module_id + ':' + conv.item_id;
+    if (!completed.includes(key)) completed.push(key);
+    localStorage.setItem('sa_completed', JSON.stringify(completed));
+
+    const cnt = (prefix) => completed.filter(c => c.startsWith(prefix + ':')).length;
+    if (cnt('social') >= 6) addB('all_social');
+    if (cnt('daily_life') >= 6) addB('all_daily');
+    if (cnt('expression') >= 4) addB('all_expression');
+    if (cnt('aba') >= 6) addB('all_aba');
+    if (cnt('emotion') >= 6) addB('all_emotion');
+    if (cnt('sleep') >= 6) addB('all_sleep');
+    if (cnt('social')>0 && cnt('daily_life')>0 && cnt('expression')>0 && cnt('aba')>0 && cnt('emotion')>0 && cnt('sleep')>0) addB('cross_module');
+    if (completed.length >= 3) addB('three_topics');
+
+    const sessions = parseInt(localStorage.getItem('sa_sessions') || '0');
+    if (sessions >= 5) addB('five_sessions');
+
+    localStorage.setItem('sa_badges', JSON.stringify(allB));
+    return earned;
+}
+
+// BADGES数据
+const BADGES_DATA = {
+    first_chat:{name:'初次对话',icon:'🗣️',desc:'完成第一次训练'},
+    three_topics:{name:'话题达人',icon:'🎯',desc:'完成3个不同项目的训练'},
+    ten_messages:{name:'积极沟通',icon:'💬',desc:'在一次训练中发送10条以上消息'},
+    high_score:{name:'社交新星',icon:'🌟',desc:'单次训练获得80分以上'},
+    all_social:{name:'社交达人',icon:'🤝',desc:'完成社交对话全部6个话题'},
+    all_daily:{name:'生活能手',icon:'🏠',desc:'完成日常生活全部6个场景'},
+    all_expression:{name:'表达之星',icon:'🗣️',desc:'完成口语表达全部4项练习'},
+    all_aba:{name:'ABA小达人',icon:'📋',desc:'完成ABA全部6个训练项目'},
+    all_emotion:{name:'情绪主人',icon:'💙',desc:'完成安抚情绪全部6项练习'},
+    all_sleep:{name:'好梦成真',icon:'🌙',desc:'完成睡眠提升全部6项练习'},
+    use_hint:{name:'善于求助',icon:'💡',desc:'使用提示功能'},
+    five_sessions:{name:'坚持不懈',icon:'🔥',desc:'完成5次训练'},
+    aba_perfect:{name:'百分百正确',icon:'💯',desc:'ABA训练中连续5次独立正确'},
+    aba_independent:{name:'独立完成',icon:'💪',desc:'ABA训练中累计10次独立正确反应'},
+    cross_module:{name:'全面开花',icon:'🌈',desc:'六个训练模块都至少完成过一次'}
+};
+
+// ===== 提示数据 =====
+const HINTS_DATA = {
+    social:{
+        travel:['💡 问问对方去过最远的地方','💡 分享你自己的出行经历','💡 聊聊最想去的地方'],
+        books:['💡 说说最近看的书','💡 问问喜欢什么类型','💡 聊聊小时候喜欢的书'],
+        sports:['💡 说说喜欢的运动','💡 问问运动心得','💡 聊聊看过的比赛'],
+        music:['💡 说说循环播放的歌','💡 聊聊去过的音乐现场','💡 问问用什么听歌软件'],
+        movies:['💡 说说最近的电影','💡 问问喜欢的导演','💡 聊聊感动的片段'],
+        games:['💡 说说最近玩的游戏','💡 问问喜欢什么类型','💡 聊聊通关经历']
+    },
+    daily_life:{
+        ordering:['💡 看看菜单选一道菜','💡 问问有什么特色推荐','💡 告诉服务员你的预算'],
+        shopping:['💡 说出你要找的东西','💡 问问这个东西在哪里','💡 比较一下不同品牌'],
+        directions:['💡 说出你要去的地方','💡 问问附近有什么标志','💡 确认一下步行要多久'],
+        doctor:['💡 说出哪里不舒服','💡 描述什么时候开始的','💡 问问需要注意什么'],
+        phone_call:['💡 先问好再回应','💡 确认时间和地点','💡 如果不去要礼貌说明'],
+        appointment:['💡 说出想预约什么','💡 确认可用的时间段','💡 留下联系方式']
+    },
+    expression:{
+        describe:['💡 从颜色开始描述','💡 说说形状和大小','💡 描述一下给你的感觉'],
+        storytelling:['💡 先想一个开头','💡 加入有趣的角色','💡 给故事一个温暖的结尾'],
+        feelings:['💡 用"我感到..."开头','💡 说说身体有什么反应','💡 想想是什么引起的'],
+        retell:['💡 先回忆主要人物','💡 想想发生了什么','💡 用自己的话说出结果']
+    },
+    aba:{
+        greeting:['💡 想想见到认识的人说什么','💡 可以说"XX好"','💡 加上对方的称呼'],
+        thanking:['💡 说"谢谢"是最基本的','💡 可以说"谢谢你帮我"','💡 加上微笑的表情更好'],
+        asking_help:['💡 先说称呼，再说需要什么','💡 用"请问"开头','💡 说清楚具体需要什么帮助'],
+        waiting:['💡 用语言表达愿意等待','💡 可以说"你先，我等"','💡 聊聊轮流玩的规则'],
+        identify_feeling:['💡 收到礼物是什么心情？','💡 用"开心"类似的词','💡 想想会有什么表情'],
+        saying_no:['💡 先说"对不起"','💡 说明不能去的原因','💡 提议另一个时间']
+    },
+    emotion:{
+        identify_emotion:['💡 用"我感到..."开头','💡 情绪没有对错','💡 留意身体的感觉'],
+        deep_breathing:['💡 注意力放在呼吸上','💡 感受腹部鼓起','💡 想象紧张感流走了'],
+        grounding:['💡 看看周围有什么','💡 摸摸手边的东西','💡 听听有什么声音'],
+        positive_self_talk:['💡 "我已经做得很好了"','💡 "慢慢来，没关系的"','💡 像安慰好朋友那样'],
+        safe_place:['💡 想想那里的颜色','💡 那里有什么声音？','💡 在那里身体感觉怎样？'],
+        progressive_relax:['💡 找到身体紧张的地方','💡 用力绷紧再放松','💡 对比紧张和放松的感觉']
+    },
+    sleep:{
+        bedtime_routine:['💡 睡前1小时放下手机','💡 泡一杯温热的牛奶','💡 听轻柔的音乐'],
+        breath_sleep:['💡 吸气4秒屏7秒呼8秒','💡 注意力放在呼气上','💡 每次呼气身体更沉'],
+        body_scan:['💡 从脚趾开始往上','💡 注意哪里还紧绷','💡 想象温暖的光在流动'],
+        sleep_visualization:['💡 想象躺在柔软的云上','💡 星光很温柔','💡 让念头随风而去'],
+        sleep_hygiene:['💡 卧室18-22度最合适','💡 每天差不多时间睡','💡 睡前别喝咖啡浓茶'],
+        calming_story:['💡 沉浸到故事里','💡 想象每一步更放松','💡 月光照在你身上']
+    }
+};
+
+// ============ 覆盖训练函数（独立运行版） ============
+
+// 重写 startTraining
+const _origStartTraining = startTraining;
+startTraining = async function() {
+    if (!curModule || !curItem) return;
+    try {
+        const mod = MODULES_DATA[curModule];
+        const item = mod.items.find(i => i.id === curItem);
+        if (!item) { alert('项目未找到'); return; }
+
+        _conv = _newConv(curModule, curItem);
+        const opening = item.opening || item.instruction || item.sd || '准备好了吗？开始吧！';
+        const character = item.character || '训练助手';
+
+        document.getElementById('trainSelectView').style.display = 'none';
+        document.getElementById('trainActiveView').style.display = 'block';
+        const color = mod.color || '#4A9C5C';
+        document.getElementById('trainAvatar').style.background = color;
+        document.getElementById('trainAvatar').textContent = mod.icon;
+        document.getElementById('trainTitle').textContent = item.name + ' · ' + character;
+        document.getElementById('trainSubtitle').textContent = mod.name;
+        document.getElementById('trainScore').textContent = '0';
+        document.getElementById('abaBar').style.display = mod.type === 'aba' ? 'flex' : 'none';
+        document.getElementById('chatArea').innerHTML = '';
+        addMsg('ai', opening, mod.icon, color);
+
+        let sessions = parseInt(localStorage.getItem('sa_sessions') || '0');
+        localStorage.setItem('sa_sessions', String(sessions + 1));
+
+        trainingActive = true;
+        document.getElementById('msgInput').focus();
+    } catch(e) { alert('开始失败: ' + e.message); }
+};
+
+// 重写 sendMessage
+const _origSendMessage = sendMessage;
+sendMessage = async function() {
+    if (!trainingActive || isSending || !_conv) return;
+    const input = document.getElementById('msgInput');
+    const msg = input.value.trim();
+    if (!msg) return;
+
+    isSending = true;
+    document.getElementById('btnSend').disabled = true;
+    input.value = '';
+    addMsg('user', msg);
+    const loadEl = addLoading();
+    stopListening();
+
+    try {
+        const mod = MODULES_DATA[_conv.module_id];
+        const item = mod.items.find(i => i.id === _conv.item_id);
+        _conv.message_count++;
+        _conv.messages.push({ role: 'user', content: msg });
+
+        let aiResponse, evaluation;
+        const apiKey = getApiKey();
+
+        if (apiKey) {
+            // TODO: 真实DeepSeek API调用
+            // 目前先用演示模式
+            aiResponse = _demoReply(_conv.module_id);
+            evaluation = _demoEval();
+        } else {
+            aiResponse = _demoReply(_conv.module_id);
+            evaluation = _demoEval();
+        }
+
+        // ABA特殊处理
+        if (mod.type === 'aba') {
+            const abaEval = _evalAba(item, msg);
+            _conv.aba_total++;
+            if (abaEval.correct === 'yes') { _conv.aba_correct++; _conv.aba_streak++; _conv.aba_independent_count++; }
+            else if (abaEval.correct === 'partial') { _conv.aba_correct += 0.5; _conv.aba_streak = 0; }
+            else { _conv.aba_streak = 0; }
+            _conv.score += abaEval.correct === 'yes' ? 20 : abaEval.correct === 'partial' ? 10 : 5;
+            _conv.aba_trials.push({ response: msg, correct: abaEval.correct });
+            aiResponse = abaEval.feedback + '\n\n' + (item.sd || '');
+            evaluation = { score: abaEval.correct === 'yes' ? 10 : 5, feedback: abaEval.feedback, tip: '',
+                aba_stats: { correct_count: Math.floor(_conv.aba_correct), total_trials: _conv.aba_total,
+                    rate: Math.round(_conv.aba_correct / _conv.aba_total * 100),
+                    streak: _conv.aba_streak, independent: _conv.aba_independent_count } };
+        } else {
+            _conv.score += evaluation.score * 2;
+            _conv.evaluations.push(evaluation);
+        }
+
+        _conv.messages.push({ role: 'ai', content: aiResponse });
+        loadEl.remove();
+
+        if (evaluation && mod.type !== 'aba') {
+            addEval(evaluation.feedback + (evaluation.tip ? ' — ' + evaluation.tip : ''));
+        }
+        addMsg('ai', aiResponse);
+        document.getElementById('trainScore').textContent = _conv.score;
+
+        if (mod.type === 'aba' && evaluation && evaluation.aba_stats) {
+            updateAba(evaluation.aba_stats);
+        }
+
+        const newBadges = _checkBadges(_conv);
+        if (newBadges.length > 0) {
+            newBadges.forEach(b => addBadge(BADGES_DATA[b] || { name: b, icon: '🏆', desc: '' }));
+            refreshAll();
+        }
+
+        if (speakerOn) speakText(aiResponse);
+        scrollDown();
+    } catch(e) {
+        loadEl.remove();
+        addMsg('ai', '发送失败: ' + e.message);
+    } finally {
+        isSending = false;
+        document.getElementById('btnSend').disabled = false;
+    }
+};
+
+// 重写 getHint
+const _origGetHint = getHint;
+getHint = async function() {
+    if (!trainingActive || isSending || !_conv) return;
+    _conv.hints_used++;
+    const hints = (HINTS_DATA[_conv.module_id] || {})[_conv.item_id] || ['💡 慢慢来，想说什么就说什么'];
+    const hint = hints[Math.floor(Math.random() * hints.length)];
+    addMsg('ai', hint, '💡', '#E8833A');
+    const newBadges = _checkBadges(_conv);
+    if (newBadges.length > 0) { newBadges.forEach(b => addBadge(BADGES_DATA[b] || { name: b, icon: '🏆', desc: '' })); refreshAll(); }
+    scrollDown();
+};
+
+// 重写 endTraining
+const _origEndTraining = endTraining;
+endTraining = async function() {
+    if (!trainingActive || !_conv) return;
+    trainingActive = false;
+    stopListening();
+
+    const mod = MODULES_DATA[_conv.module_id];
+    const item = mod.items.find(i => i.id === _conv.item_id);
+    const newBadges = _checkBadges(_conv);
+
+    let avgScore = 0;
+    if (_conv.evaluations.length > 0) {
+        avgScore = _conv.evaluations.reduce((s, e) => s + (e.score || 5), 0) / _conv.evaluations.length;
+    }
+
+    const coinsEarned = Math.max(1, Math.floor(_conv.score / 10));
+    const badgeBonus = newBadges.length * 5;
+    const totalCoins = coinsEarned + badgeBonus;
+    addCoins(totalCoins);
+
+    const allB = JSON.parse(localStorage.getItem('sa_badges') || '[]');
+    const newNames = newBadges.map(id => (BADGES_DATA[id] || {}).name || id);
+    let abaHTML = '';
+    if (mod.type === 'aba' && _conv.aba_total > 0) {
+        abaHTML = `<div style="font-size:12px;font-weight:600;margin:8px 0;">📋 ABA数据：正确${Math.floor(_conv.aba_correct)}/${_conv.aba_total}（${Math.round(_conv.aba_correct/_conv.aba_total*100)}%）独立${_conv.aba_independent_count}次</div>`;
+    }
+    let badgeHTML = '';
+    if (allB.length > 0) {
+        badgeHTML = `<div class="badges-row">${allB.map(id => {
+            const b = BADGES_DATA[id] || { name: id, icon: '🏆' };
+            return `<span class="badge-tag ${newBadges.includes(id)?'new-badge':''}">${b.icon}${b.name}${newBadges.includes(id)?'🆕':''}</span>`;
+        }).join('')}</div>`;
+    }
+
+    let msg = '🌱 每一次尝试都是进步的开始，继续加油！';
+    if (avgScore >= 8) msg = '🌟 太棒了！你表现得非常出色！';
+    else if (avgScore >= 6) msg = '👍 做得很好！每次练习都在进步。';
+    else if (avgScore >= 4) msg = '💪 不错哦！坚持下去会越来越好。';
+
+    document.getElementById('summaryContent').innerHTML = `
+        <div class="sum-icon">${mod.icon}</div>
+        <h2>${item.name} · 训练完成</h2>
+        <p style="color:var(--muted);font-size:13px;margin:6px 0;">${msg}</p>
+        <div class="stats-row">
+            <div class="stat-item"><div class="val">${_conv.score}</div><div class="lbl">积分</div></div>
+            <div class="stat-item"><div class="val">${_conv.message_count}</div><div class="lbl">轮次</div></div>
+            <div class="stat-item"><div class="val">${avgScore.toFixed(1)}</div><div class="lbl">评分</div></div>
+        </div>
+        ${abaHTML}
+        <div style="background:var(--gold-light);border-radius:14px;padding:10px;margin:10px 0;text-align:center;">
+            <span style="font-size:24px;">🪙</span>
+            <div style="font-weight:700;color:#8B6914;">获得 <b style="font-size:20px;">${totalCoins}</b> 金币！</div>
+            <div style="font-size:10px;color:#8B6914;">训练得分 ${coinsEarned} + 徽章奖励 ${badgeBonus}</div>
+        </div>
+        ${badgeHTML}
+        <button class="btn-restart" onclick="closeSummary()">🔄 继续训练</button>
+    `;
+    document.getElementById('summaryModal').classList.add('open');
+
+    _conv = null;
+    refreshAll();
+};
+
+// 重写 loadStats
+loadStats = function() {
+    const sessions = parseInt(localStorage.getItem('sa_sessions') || '0');
+    const badges = JSON.parse(localStorage.getItem('sa_badges') || '[]');
+    document.getElementById('topSessions').textContent = sessions;
+    document.getElementById('topBadges').textContent = badges.length;
+};
+
+// PWA install banner 在独立版中需要手动触发
+window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    window._deferredPrompt = e;
+    if (!localStorage.getItem('sa_install_dismissed')) {
+        const banner = document.getElementById('installBanner');
+        if (banner) banner.classList.add('show');
+    }
+});
+
+console.log('🦏 星宝训练营 - 独立运行版已就绪');
+console.log('   演示模式：✅（离线可用）');
+console.log('   AI模式：配置API Key后启用');
+
 // 注册Service Worker
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('/static/sw.js').catch(() => {});
 }
 </script>
-<script src="standalone.js"></script>
+
 </body>
 </html>
