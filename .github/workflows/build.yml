@@ -34,6 +34,12 @@ jobs:
       - name: 同步Capacitor
         run: npx cap sync android
 
+      - name: 强制覆盖配置
+        run: cp capacitor.config.json android/app/src/main/assets/capacitor.config.json
+
+      - name: 确认配置正确
+        run: cat android/app/src/main/assets/capacitor.config.json | grep -v "url"
+
       - name: 编译APK (Debug)
         run: |
           cd android
